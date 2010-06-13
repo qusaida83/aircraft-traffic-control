@@ -67,6 +67,8 @@ public class Aircraft {
 		this.landingBeforeTargetTimePenaltyCost = landingBeforeTargetTimePenaltyCost;
 	}
 
+	
+	
 	public int getLandingTime() {
 		return landingTime;
 	}

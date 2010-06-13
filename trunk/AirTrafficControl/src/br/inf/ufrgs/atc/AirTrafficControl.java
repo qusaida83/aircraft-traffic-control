@@ -38,6 +38,7 @@ public class AirTrafficControl {
 	 * algorithm.
 	 */
 	public void scheduleAircraftsLandings() {
-
+		// TODO implement...
+		throw new RuntimeException("Not implemented!");
 	}
 }
