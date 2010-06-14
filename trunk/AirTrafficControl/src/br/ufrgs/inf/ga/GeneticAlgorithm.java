@@ -3,13 +3,25 @@ package br.ufrgs.inf.ga;
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 
 public class GeneticAlgorithm {
-
-	private Population population;
 	
 	/**
 	 * Max number of generations that the algorithm will run until a valid solution is find.
 	 */
-	public static final int MAX_GENERATION = 100;
+	public static final int MAX_GENERATION = 900;
+	
+	/**
+	 * Population where each individual represents a solution for the problem that is been solved.
+	 */
+	private Population<Individual> population;
+	
+	private PopulationInitializer populationInitializer;
+	
+	private FitnessCalculator fitnessCalculator;
+	
+	public GeneticAlgorithm(PopulationInitializer populationInitializer, FitnessCalculator fitnessCalculator) {
+		this.populationInitializer = populationInitializer;
+		this.fitnessCalculator = fitnessCalculator;
+	}
 	
 	/**
 	 * Executes the algorithm.
@@ -37,6 +49,13 @@ public class GeneticAlgorithm {
 		}
 	}
 	
+	/**
+	 * initializes the population and make the first fitness evaluation. 
+	 */
+	public void initializePopulation() {
+		populationInitializer.initializePopulation(population, fitnessCalculator);
+	}
+	
 	private void mutate() {
 		// TODO implement...
 		throw new RuntimeException("Not implemented!");
@@ -53,14 +72,6 @@ public class GeneticAlgorithm {
 	}
 
 	private void fitnessCalculation() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
-	}
-
-	/**
-	 * initializes the population and make the first fitness evaluation. 
-	 */
-	public void initializePopulation() {
 		// TODO implement...
 		throw new RuntimeException("Not implemented!");
 	}

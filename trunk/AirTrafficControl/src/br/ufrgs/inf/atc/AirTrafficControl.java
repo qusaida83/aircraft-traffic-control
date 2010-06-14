@@ -1,5 +1,7 @@
 package br.ufrgs.inf.atc;
 
+import br.ufrgs.inf.atc.model.Aircraft;
+
 
 /**
  * This class implements the air traffic control system.

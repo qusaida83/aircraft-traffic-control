@@ -1,15 +1,15 @@
 package br.ufrgs.inf.ga;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 public class Population<T> implements Iterable<T> {
 
 	public static final int MAX_INDIVIDUALS = 200;
 	
-	private final List<T> individuals;
+	private final Set<T> individuals;
 	
-	public Population(List<T> individuals) {
+	public Population(Set<T> individuals) {
 		this.individuals = individuals;
 	}
 	

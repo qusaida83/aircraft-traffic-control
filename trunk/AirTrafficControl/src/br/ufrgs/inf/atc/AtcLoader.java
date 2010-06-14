@@ -4,13 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+import br.ufrgs.inf.atc.model.Aircraft;
+
 /**
  * Load an instance of ATC problem from a text file.
  * 
  * @author diego
  *
  */
-public class ATCInstanceLoader {
+public class AtcLoader {
 
 	/**
 	 * Creates the ATC instance based on an input file.

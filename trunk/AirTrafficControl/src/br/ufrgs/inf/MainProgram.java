@@ -2,7 +2,7 @@ package br.ufrgs.inf;
 
 import java.io.IOException;
 
-import br.ufrgs.inf.atc.ATCInstanceLoader;
+import br.ufrgs.inf.atc.AtcLoader;
 import br.ufrgs.inf.atc.AirTrafficControl;
 
 /**
@@ -23,7 +23,7 @@ public class MainProgram {
 			String fileName = args[0];
 
 			try {
-				AirTrafficControl atc = ATCInstanceLoader.createATCInstanceFromFile(fileName);
+				AirTrafficControl atc = AtcLoader.createATCInstanceFromFile(fileName);
 
 			} catch (IOException e) {
 				System.out.println("An I/O error occured. The input file may not be in the standard form.");

@@ -1,18 +1,7 @@
-package br.ufrgs.inf.atc;
+package br.ufrgs.inf.atc.model;
 
-/**
- * Encapsulates all aircraft data necessary for a ATC (air traffic control) schedules all landings.
- * 
- * @author diego
- *
- */
-public class Aircraft {
+public class AircraftStaticData {
 
-	/**
-	 * Aircraft landing time.
-	 */
-	private int landingTime;
-	
 	/**
 	 * time that the aircraft appears on the radar area.
 	 */
@@ -42,7 +31,7 @@ public class Aircraft {
 	 * the penalty cost for aircraft landing after the target time.
 	 */
 	private final float landingAfterTargetTimePenaltyCost;
-
+	
 	/**
 	 * Constructor.
 	 * Initializes the aircraft parameters.
@@ -54,7 +43,7 @@ public class Aircraft {
 	 * @param landingBeforeTargetTimePenaltyCost the penalty cost for aircraft landing before the target time.
 	 * @param landingAfterTargetTimePenaltyCost the penalty cost for aircraft landing after the target time.
 	 */
-	public Aircraft(int appearanceTime, int earliestLandingTime,
+	public AircraftStaticData(int appearanceTime, int earliestLandingTime,
 					int targetLandingTime, int latestLandingTime,
 					float landingBeforeTargetTimePenaltyCost,
 					float landingAfterTargetTimePenaltyCost)
@@ -65,16 +54,6 @@ public class Aircraft {
 		this.latestLandingTime = latestLandingTime;
 		this.landingAfterTargetTimePenaltyCost = landingAfterTargetTimePenaltyCost;
 		this.landingBeforeTargetTimePenaltyCost = landingBeforeTargetTimePenaltyCost;
-	}
-
-	
-	
-	public int getLandingTime() {
-		return landingTime;
-	}
-
-	public void setLandingTime(int landingTime) {
-		this.landingTime = landingTime;
 	}
 
 	public int getAppearanceTime() {
