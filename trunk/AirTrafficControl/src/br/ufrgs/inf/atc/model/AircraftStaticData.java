@@ -1,5 +1,11 @@
 package br.ufrgs.inf.atc.model;
 
+/**
+ * Aircraft static data loaded from the input file.
+ * 
+ * @author diego
+ *
+ */
 public class AircraftStaticData {
 
 	/**
@@ -33,6 +39,11 @@ public class AircraftStaticData {
 	private final float landingAfterTargetTimePenaltyCost;
 	
 	/**
+	 * Gap time between this aircraft landing and the others landings.
+	 */
+	private final int[] gapTimeBetweenLandings;
+	
+	/**
 	 * Constructor.
 	 * Initializes the aircraft parameters.
 	 * 
@@ -42,11 +53,13 @@ public class AircraftStaticData {
 	 * @param latestLandingTime the landing time for the aircraft traveling at fuel speed economy.
 	 * @param landingBeforeTargetTimePenaltyCost the penalty cost for aircraft landing before the target time.
 	 * @param landingAfterTargetTimePenaltyCost the penalty cost for aircraft landing after the target time.
+	 * @param gapTimeBetweenLandings Gap time between this aircraft landing and the others landings.
 	 */
 	public AircraftStaticData(int appearanceTime, int earliestLandingTime,
 					int targetLandingTime, int latestLandingTime,
 					float landingBeforeTargetTimePenaltyCost,
-					float landingAfterTargetTimePenaltyCost)
+					float landingAfterTargetTimePenaltyCost,
+					int[] gapTimeBetweenLandings)
 	{
 		this.appearanceTime = appearanceTime;
 		this.earliestLandingTime = earliestLandingTime;
@@ -54,6 +67,7 @@ public class AircraftStaticData {
 		this.latestLandingTime = latestLandingTime;
 		this.landingAfterTargetTimePenaltyCost = landingAfterTargetTimePenaltyCost;
 		this.landingBeforeTargetTimePenaltyCost = landingBeforeTargetTimePenaltyCost;
+		this.gapTimeBetweenLandings = gapTimeBetweenLandings;
 	}
 
 	public int getAppearanceTime() {
@@ -79,4 +93,9 @@ public class AircraftStaticData {
 	public float getLandingAfterTargetTimePenaltyCost() {
 		return landingAfterTargetTimePenaltyCost;
 	}
+
+	public int[] getGapTimeBetweenLandings() {
+		return gapTimeBetweenLandings;
+	}
+	
 }

@@ -1,5 +1,7 @@
 package br.ufrgs.inf.atc.model;
 
+import java.util.Arrays;
+
 /**
  * Encapsulates all aircraft data necessary for a ATC (air traffic control) schedules all landings.
  * 
@@ -32,9 +34,10 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	public Aircraft(int appearanceTime, int earliestLandingTime,
 					int targetLandingTime, int latestLandingTime,
 					float landingBeforeTargetTimePenaltyCost,
-					float landingAfterTargetTimePenaltyCost)
+					float landingAfterTargetTimePenaltyCost,
+					int[] gapTimeBetweenLandings)
 	{
-		this.staticData = new AircraftStaticData(appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost);
+		this.staticData = new AircraftStaticData(appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost, gapTimeBetweenLandings);
 	}
 
 	/**
@@ -58,7 +61,8 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 			this.getLandingBeforeTargetTimePenaltyCost() == that.getLandingBeforeTargetTimePenaltyCost() &&
 			this.getLandingTime() == that.getLandingTime() &&
 			this.getLatestLandingTime() == that.getLatestLandingTime() &&
-			this.getTargetLandingTime() == that.getTargetLandingTime()) {
+			this.getTargetLandingTime() == that.getTargetLandingTime() &&
+			Arrays.equals(this.getGapTimeBetweenLandings(), that.getGapTimeBetweenLandings())) {
 			
 			return true;
 		}
@@ -114,5 +118,9 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 
 	public float getLandingAfterTargetTimePenaltyCost() {
 		return staticData.getLandingAfterTargetTimePenaltyCost();
+	}
+	
+	public int[] getGapTimeBetweenLandings() {
+		return staticData.getGapTimeBetweenLandings();
 	}
 }

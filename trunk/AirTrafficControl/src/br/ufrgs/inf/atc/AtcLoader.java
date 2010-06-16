@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import br.ufrgs.inf.atc.model.Aircraft;
+import br.ufrgs.inf.atc.model.AircraftStaticData;
 
 /**
  * Load an instance of ATC problem from a text file.
@@ -29,30 +30,26 @@ public class AtcLoader {
 		// is separated from others by a space character.
 		String textFromFile = getTextFromFile(fileName);
 		textFromFile = textFromFile.replace("  ", " ");
-		//textFromFile = textFromFile.replace("--", "-");
+
 		textFromFile = textFromFile.substring(1, textFromFile.length() - 1);
 		String[] atcInstanceParameters = textFromFile.split(" ");
 
+		// number of aircrafts in the ATC problem instance.
 		int aircraftCount = Integer.valueOf(atcInstanceParameters[0]);
 
 		// allocates a vector to store all aircrafts in the radar area.
-		Aircraft[] aircrafts = new Aircraft[aircraftCount];
+		AircraftStaticData[] aircrafts = new AircraftStaticData[aircraftCount];
 
-		// initializes the matrix with landing times gap between the aircrafts.
-		int[][] gapTimeBetweenAnotherAircraftLanding = new int[aircraftCount][aircraftCount];
 		for (int i = 0; i < aircraftCount; i++) {
 			// creates the aircraft
-			aircrafts[i] = createAircraft(i, atcInstanceParameters, aircraftCount);
-			// add the aircraft landing times gap to the matrix of landing times
-			// gap between all aircrafts.
-			gapTimeBetweenAnotherAircraftLanding[i] = createLandingTimesGapForAircraft(i, atcInstanceParameters, aircraftCount);
+			aircrafts[i] = createAircraftStaticData(i, atcInstanceParameters, aircraftCount);
 		}
 
-		return new AirTrafficControl(aircrafts, gapTimeBetweenAnotherAircraftLanding);
+		return new AirTrafficControl(aircrafts);
 	}
 
 	/**
-	 * Creates an aircraft based on the parameters retrieved from a file.
+	 * Creates an {@link AircraftStaticData} based on the parameters retrieved from a file.
 	 * 
 	 * @param atcInstanceParameters
 	 *            vector with all parameters for the ATC problem instance.
@@ -63,7 +60,7 @@ public class AtcLoader {
 	 *            aircraft among all the aircrafts in the file.
 	 * @return an instance of {@link Aircraft}
 	 */
-	private static Aircraft createAircraft(int aircraftId, String[] atcInstanceParameters, int aircraftCount) {
+	private static AircraftStaticData createAircraftStaticData(int aircraftId, String[] atcInstanceParameters, int aircraftCount) {
 		// start index for the aircraft parameters.
 		int aircraftParametersIndex = getAircraftParametersIndex(aircraftId, aircraftCount);
 		int appearanceTime = Integer.valueOf(atcInstanceParameters[aircraftParametersIndex]);
@@ -72,9 +69,9 @@ public class AtcLoader {
 		int latestLandingTime = Integer.valueOf(atcInstanceParameters[aircraftParametersIndex + 3]);
 		float landingBeforeTargetTimePenaltyCost = Float.valueOf(atcInstanceParameters[aircraftParametersIndex + 4]);
 		float landingAfterTargetTimePenaltyCost = Float.valueOf(atcInstanceParameters[aircraftParametersIndex + 5]);
-
-		Aircraft aircraft = new Aircraft(appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost);
-		return aircraft;
+		int[] gapTimeBetweenLandings = createGapTimesBetweenLandings(aircraftId, atcInstanceParameters, aircraftCount);
+		
+		return new AircraftStaticData(appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost, gapTimeBetweenLandings);
 	}
 
 	/**
@@ -89,7 +86,7 @@ public class AtcLoader {
 	 * @param aircraftCount
 	 *            number of aircrafts
 	 */
-	private static int[] createLandingTimesGapForAircraft(int aircraftId, String[] atcInstanceParameters, int aircraftCount) {
+	private static int[] createGapTimesBetweenLandings(int aircraftId, String[] atcInstanceParameters, int aircraftCount) {
 		int[] aircraftLandingTimesGap = new int[aircraftCount];
 		int aircraftTimeGapsIndex = getAircraftParametersIndex(aircraftId, aircraftCount) + 6;
 		for (int i = 0; i < aircraftCount; i++) {
