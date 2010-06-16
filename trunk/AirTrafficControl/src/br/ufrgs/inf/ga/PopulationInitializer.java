@@ -39,7 +39,7 @@ public class PopulationInitializer {
 	/**
 	 * initializes the population and make the first fitness evaluation. 
 	 */
-	public Population<Individual> createPopulation(Population<Individual> population, FitnessCalculator fitnessCalculator) {
+	public Population<Individual> createPopulation(final FitnessCalculator fitnessCalculator) {
 		Set<Individual> individuals = new HashSet<Individual>();
 		// creates the initial population randomly
 		for (int i = 0; i < Population.MAX_INDIVIDUALS; i++) {
@@ -55,7 +55,7 @@ public class PopulationInitializer {
 	 * @param fitnessCalculator fitness value calculator.
 	 * @return an individual.
 	 */
-	private Individual createRandomIndividual(FitnessCalculator fitnessCalculator) {
+	private Individual createRandomIndividual(final FitnessCalculator fitnessCalculator) {
 		List<Aircraft> aircraftLandingSequenceList = new LinkedList<Aircraft>();
 		for (AircraftStaticData aircraftStaticData : aircraftsStaticData) {
 			Aircraft newAircraft = new Aircraft(aircraftStaticData);

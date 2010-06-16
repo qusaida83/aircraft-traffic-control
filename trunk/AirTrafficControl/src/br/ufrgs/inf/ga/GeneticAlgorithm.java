@@ -2,6 +2,18 @@ package br.ufrgs.inf.ga;
 
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 
+/**
+ * Genetic Algorithm Class.
+ * 
+ * <p>
+ * This class implements a genetic algorithm meta heuristic to solve the
+ * Air Traffic Control Problem. Solve means, find the best solution based in
+ * an evaluation function in a finite number of iterations.
+ * </p>
+ * 
+ * @author diego
+ *
+ */
 public class GeneticAlgorithm {
 	
 	/**
@@ -10,14 +22,32 @@ public class GeneticAlgorithm {
 	public static final int MAX_GENERATION = 900;
 	
 	/**
+	 * Responsable for initialize the population object.
+	 * This class provide a set of initializers methods.
+	 */
+	private final PopulationInitializer populationInitializer;
+	
+	/**
+	 * Calculator for the fitness value of an individual in the population.
+	 */
+	private final FitnessCalculator fitnessCalculator;
+	
+	/**
 	 * Population where each individual represents a solution for the problem that is been solved.
 	 */
 	private Population<Individual> population;
 	
-	private PopulationInitializer populationInitializer;
+	/**
+	 * The best individual found at the end of the algorithm execution.
+	 */
+	private Individual bestIndividual;
 	
-	private FitnessCalculator fitnessCalculator;
-	
+	/**
+	 * Resolves the dependencies of this class.
+	 * 
+	 * @param populationInitializer population initializer instance.
+	 * @param fitnessCalculator fitness calculator instance.
+	 */
 	public GeneticAlgorithm(PopulationInitializer populationInitializer, FitnessCalculator fitnessCalculator) {
 		this.populationInitializer = populationInitializer;
 		this.fitnessCalculator = fitnessCalculator;
@@ -36,10 +66,11 @@ public class GeneticAlgorithm {
 			
 			// The algorithm stop condition
 			while(!solutionFound() && generation < MAX_GENERATION) {				
-				fitnessCalculation();
+				findTheBestIndividualInCurrentGeneration();
 				selectParentsForReproduction();
 				reproduct();
 				mutate();
+				fitnessCalculation();
 				
 				// next generation...
 				generation++;
@@ -49,29 +80,34 @@ public class GeneticAlgorithm {
 		}
 	}
 	
+	private void findTheBestIndividualInCurrentGeneration() {
+		// TODO implement...
+		throw new RuntimeException("Not implemented!");
+	}
+
 	/**
 	 * initializes the population and make the first fitness evaluation. 
 	 */
-	public void initializePopulation() {
-		populationInitializer.createPopulation(population, fitnessCalculator);
+	protected void initializePopulation() {
+		this.population = populationInitializer.createPopulation(fitnessCalculator);
 	}
 	
-	private void mutate() {
+	protected void mutate() {
 		// TODO implement...
 		throw new RuntimeException("Not implemented!");
 	}
 
-	private void reproduct() {
+	protected void reproduct() {
 		// TODO implement...
 		throw new RuntimeException("Not implemented!");
 	}
 
-	private void selectParentsForReproduction() {
+	protected void selectParentsForReproduction() {
 		// TODO implement...
 		throw new RuntimeException("Not implemented!");
 	}
 
-	private void fitnessCalculation() {
+	protected void fitnessCalculation() {
 		// TODO implement...
 		throw new RuntimeException("Not implemented!");
 	}
@@ -80,7 +116,7 @@ public class GeneticAlgorithm {
 	 * Verify the stop condition of the algorithm.
 	 * @return true if the stop condition is reached, false otherwise.
 	 */
-	public boolean solutionFound() {
+	protected boolean solutionFound() {
 		// TODO implement...
 		throw new RuntimeException("Not implemented!");
 	}

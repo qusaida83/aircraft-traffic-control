@@ -1,0 +1,7 @@
+TODOS:
+
+1) Implements the FitnessCalculator class.
+2) Implements the ParentSelector Genetic Operator.
+3) Implements the Reproduction Genetic Operator.
+4) Implements the Mutation Genetic Operator.
+5) Implements the

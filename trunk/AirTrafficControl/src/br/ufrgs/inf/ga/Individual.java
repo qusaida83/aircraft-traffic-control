@@ -4,6 +4,7 @@ import br.ufrgs.inf.atc.model.Aircraft;
 
 /**
  * Class that encapsulates all information related to an individual of the population.
+ * 
  * <p>
  * An individual represents a solution for the genetic algorithm problem and
  * this solution is represented (in this case) by the {@link Individual#aircraftLandingSequence} vector.
@@ -26,6 +27,12 @@ public class Individual {
 	 */
 	private final int fitnessValue;
 	
+	/**
+	 * Initializes the individual data.
+	 * 
+	 * @param aircraftLandingSequence Sequence of landings that represents a solution (valid or not) for the genetic problem.
+	 * @param fitnessValue fitness value that tell us how good this solution is for the ATC problem instance.
+	 */
 	public Individual(Aircraft[] aircraftLandingSequence, int fitnessValue) {
 		this.aircraftLandingSequence = aircraftLandingSequence;
 		this.fitnessValue = fitnessValue;
