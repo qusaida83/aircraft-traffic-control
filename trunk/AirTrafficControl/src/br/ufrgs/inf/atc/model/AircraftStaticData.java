@@ -9,6 +9,11 @@ package br.ufrgs.inf.atc.model;
 public class AircraftStaticData {
 
 	/**
+	 * Aircraft index on the {@link AircraftStaticData) with the parameters of the ATC problem instance loaded from an input file.
+	 */
+	private final int aircraftId;
+	
+	/**
 	 * time that the aircraft appears on the radar area.
 	 */
 	private final int appearanceTime;
@@ -55,12 +60,14 @@ public class AircraftStaticData {
 	 * @param landingAfterTargetTimePenaltyCost the penalty cost for aircraft landing after the target time.
 	 * @param gapTimeBetweenLandings Gap time between this aircraft landing and the others landings.
 	 */
-	public AircraftStaticData(int appearanceTime, int earliestLandingTime,
-					int targetLandingTime, int latestLandingTime,
-					float landingBeforeTargetTimePenaltyCost,
-					float landingAfterTargetTimePenaltyCost,
-					int[] gapTimeBetweenLandings)
+	public AircraftStaticData(int aircraftId,
+			int appearanceTime, int earliestLandingTime,
+			int targetLandingTime, int latestLandingTime,
+			float landingBeforeTargetTimePenaltyCost,
+			float landingAfterTargetTimePenaltyCost,
+			int[] gapTimeBetweenLandings)
 	{
+		this.aircraftId = aircraftId;
 		this.appearanceTime = appearanceTime;
 		this.earliestLandingTime = earliestLandingTime;
 		this.targetLandingTime = targetLandingTime;
@@ -97,5 +104,8 @@ public class AircraftStaticData {
 	public int[] getGapTimeBetweenLandings() {
 		return gapTimeBetweenLandings;
 	}
-	
+
+	public int getAircraftId() {
+		return aircraftId;
+	}
 }

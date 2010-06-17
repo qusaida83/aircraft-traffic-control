@@ -9,7 +9,7 @@ import java.util.Arrays;
  *
  */
 public class Aircraft implements Cloneable, Comparable<Aircraft> {
-
+	
 	/**
 	 * Aircraft landing time.
 	 */
@@ -31,13 +31,13 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 * @param landingBeforeTargetTimePenaltyCost the penalty cost for aircraft landing before the target time.
 	 * @param landingAfterTargetTimePenaltyCost the penalty cost for aircraft landing after the target time.
 	 */
-	public Aircraft(int appearanceTime, int earliestLandingTime,
+	public Aircraft(int aircraftId, int appearanceTime, int earliestLandingTime,
 					int targetLandingTime, int latestLandingTime,
 					float landingBeforeTargetTimePenaltyCost,
 					float landingAfterTargetTimePenaltyCost,
 					int[] gapTimeBetweenLandings)
 	{
-		this.staticData = new AircraftStaticData(appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost, gapTimeBetweenLandings);
+		this(new AircraftStaticData(aircraftId, appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost, gapTimeBetweenLandings));
 	}
 
 	/**
@@ -46,6 +46,9 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 */
 	public Aircraft(AircraftStaticData staticData) {
 		this.staticData = staticData;
+
+		// By default, the landing time is set as the target time of the aircraft.
+		this.landingTime = staticData.getTargetLandingTime();
 	}
 	
 	@Override
@@ -55,7 +58,8 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 		}
 		
 		Aircraft that = (Aircraft) obj;
-		if (this.getAppearanceTime() == that.getAppearanceTime() &&
+		if (this.getAircraftId() == that.getAircraftId() &&
+			this.getAppearanceTime() == that.getAppearanceTime() &&
 			this.getEarliestLandingTime() == that.getEarliestLandingTime() &&
 			this.getLandingAfterTargetTimePenaltyCost() == that.getLandingAfterTargetTimePenaltyCost() &&
 			this.getLandingBeforeTargetTimePenaltyCost() == that.getLandingBeforeTargetTimePenaltyCost() &&
@@ -122,5 +126,26 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	
 	public int[] getGapTimeBetweenLandings() {
 		return staticData.getGapTimeBetweenLandings();
+	}
+	
+	/**
+	 * Return the gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
+	 * 
+	 * @param otherAircraftId if of other aircraft.
+	 * @return The gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
+	 */
+	public int getGapTimeBetweenAircraft(int otherAircraftId) {
+		return staticData.getGapTimeBetweenLandings()[otherAircraftId];
+	}
+
+	public int getAircraftId() {
+		return staticData.getAircraftId();
+	}
+
+	/**
+	 * Sets this landing time equals to the target landing time.
+	 */
+	public void setBestLandingTime() {
+		this.landingTime = getTargetLandingTime();
 	}
 }

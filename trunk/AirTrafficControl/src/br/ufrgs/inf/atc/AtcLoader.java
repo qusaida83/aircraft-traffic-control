@@ -71,7 +71,7 @@ public class AtcLoader {
 		float landingAfterTargetTimePenaltyCost = Float.valueOf(atcInstanceParameters[aircraftParametersIndex + 5]);
 		int[] gapTimeBetweenLandings = createGapTimesBetweenLandings(aircraftId, atcInstanceParameters, aircraftCount);
 		
-		return new AircraftStaticData(appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost, gapTimeBetweenLandings);
+		return new AircraftStaticData(aircraftId, appearanceTime, earliestLandingTime, targetLandingTime, latestLandingTime, landingBeforeTargetTimePenaltyCost, landingAfterTargetTimePenaltyCost, gapTimeBetweenLandings);
 	}
 
 	/**

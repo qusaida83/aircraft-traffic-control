@@ -1,5 +1,6 @@
 package br.ufrgs.inf.ga;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -56,29 +57,45 @@ public class PopulationInitializer {
 	 * @return an individual.
 	 */
 	private Individual createRandomIndividual(final FitnessCalculator fitnessCalculator) {
-		List<Aircraft> aircraftLandingSequenceList = new LinkedList<Aircraft>();
-		for (AircraftStaticData aircraftStaticData : aircraftsStaticData) {
-			Aircraft newAircraft = new Aircraft(aircraftStaticData);
-			newAircraft.setLandingTime(calculateRandomLandingTime(newAircraft.getEarliestLandingTime(), newAircraft.getLatestLandingTime()));
-			aircraftLandingSequenceList.add(newAircraft);
+		// the chromosome of the individual.
+		Aircraft[] aircraftLandingSequence = new Aircraft[aircraftsStaticData.length];
+		
+		
+		for (int i = 0; i < aircraftsStaticData.length; i++) {
+			Aircraft newAircraft = new Aircraft(aircraftsStaticData[i]);
+			aircraftLandingSequence[i] = newAircraft;
+		}
+		// sort the list of aircraft by it's landing time
+		Arrays.sort(aircraftLandingSequence);
+		
+		for (int i = 0; i < aircraftLandingSequence.length; i++) {
+			
+				if (i > 0) {
+					
+
+				} else {
+
+				}
+			
 		}
 		
-		// sort the list of aircraft by it's landing time
-		Collections.sort(aircraftLandingSequenceList);
 		
-		Aircraft[] aircraftLandingSequence = aircraftLandingSequenceList.toArray(new Aircraft[aircraftLandingSequenceList.size()]);
 		int fitnessValue = fitnessCalculator.calculate(aircraftLandingSequence);
 		return new Individual(aircraftLandingSequence, fitnessValue);
 	}
 	
 	/**
 	 * Generates a random landing time between the earliest landing time and the latest landing time of an aircraft.
+	 * 
 	 * @param earliestLandingTime
 	 * @param latestLandingTime
 	 * @return a valid random landing time.
 	 */
-	private int calculateRandomLandingTime(int earliestLandingTime, int latestLandingTime) {
-		Random rand = new Random(System.currentTimeMillis());
-		return earliestLandingTime + rand.nextInt(latestLandingTime - earliestLandingTime);
+	private int calculateLandingTimeNearToTargetTime(Aircraft aircraft) {
+		for (AircraftStaticData staticData : aircraftsStaticData) {
+			
+		}
+		
+		return 0;
 	}
 }
