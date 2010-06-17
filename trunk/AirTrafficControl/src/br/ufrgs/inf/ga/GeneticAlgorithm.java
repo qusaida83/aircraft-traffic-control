@@ -35,7 +35,7 @@ public class GeneticAlgorithm {
 	/**
 	 * Population where each individual represents a solution for the problem that is been solved.
 	 */
-	private Population<Individual> population;
+	private Population population;
 	
 	/**
 	 * The best individual found at the end of the algorithm execution.

@@ -1,5 +1,7 @@
 package br.ufrgs.inf.ga;
 
+import java.util.Arrays;
+
 import br.ufrgs.inf.atc.model.Aircraft;
 
 /**
@@ -15,7 +17,7 @@ import br.ufrgs.inf.atc.model.Aircraft;
  * @author diego
  *
  */
-public class Individual {
+public class Individual implements Comparable<Individual> {
 	
 	/**
 	 *  Represents a chromosome for the genetic algorithm. 
@@ -46,4 +48,34 @@ public class Individual {
 		return fitnessValue;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Individual)) {
+			return false;
+		}
+		
+		Individual thatIndividual = (Individual)obj;
+		return this.getFitnessValue() == thatIndividual.getFitnessValue() &&
+			   Arrays.equals(this.getAircraftLandingSequence(), thatIndividual.getAircraftLandingSequence()); 
+	}
+	
+	@Override
+	public String toString() {
+		return "Fitness value: " + this.fitnessValue + ", Landing sequence: " + aircraftLandingSequence;
+	}
+
+	/**
+	 * A Individual is better than other one if it's fitness value is lower than the other one.
+	 * This method in a collections sorting creates an ASC ordered list.
+	 */
+	@Override
+	public int compareTo(Individual o) {
+		if (this.getFitnessValue() < o.getFitnessValue()) {
+			return 1;
+		} else if (this.getFitnessValue() > o.getFitnessValue()) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
 }

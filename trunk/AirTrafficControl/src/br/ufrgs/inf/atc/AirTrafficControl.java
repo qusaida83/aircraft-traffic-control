@@ -1,7 +1,10 @@
 package br.ufrgs.inf.atc;
 
-import br.ufrgs.inf.atc.model.Aircraft;
 import br.ufrgs.inf.atc.model.AircraftStaticData;
+import br.ufrgs.inf.ga.FitnessCalculator;
+import br.ufrgs.inf.ga.GeneticAlgorithm;
+import br.ufrgs.inf.ga.PopulationInitializer;
+import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 
 
 /**
@@ -30,9 +33,12 @@ public class AirTrafficControl {
 	/**
 	 * Generate a landing schedule based on the aircrafts data using a genetic
 	 * algorithm.
+	 * @throws AlgorithmException 
 	 */
-	public void scheduleAircraftsLandings() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
+	public void scheduleAircraftsLandings() throws AlgorithmException {
+		FitnessCalculator fc = new FitnessCalculator();
+		PopulationInitializer pi = new PopulationInitializer(aircrafts, fc);
+		GeneticAlgorithm ga = new GeneticAlgorithm(pi, fc);
+		ga.execute();
 	}
 }

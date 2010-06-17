@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import br.ufrgs.inf.atc.AtcLoader;
 import br.ufrgs.inf.atc.AirTrafficControl;
+import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 
 /**
  * Creates an instance of ATC problem from a input file and execute the ATC
@@ -14,7 +15,7 @@ import br.ufrgs.inf.atc.AirTrafficControl;
  */
 public class MainProgram {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws AlgorithmException {
 		if (args == null || args.length == 0) {
 			System.out.println("Error!");
 			System.out.println("[Usage] java "+ AirTrafficControl.class.getName() + " <fileName>");

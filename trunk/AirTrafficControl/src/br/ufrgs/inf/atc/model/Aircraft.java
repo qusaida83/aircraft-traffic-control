@@ -92,6 +92,11 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 		return aircraft;
 	}
 	
+	@Override
+	public String toString() {
+		return "Aircraft " + this.getId() + " (landing time: " + this.getLandingTime() + ", target time: " + this.getTargetLandingTime() + ", diff: " + (this.getTargetLandingTime() - this.getLandingTime()) + ")";
+	}
+	
 	/**
 	 * Checks if this aircraft landing time (let call it xj) respects the restriction xj >= xi + Sij.
 	 * Where xi is the landing time of the previous aircraft and

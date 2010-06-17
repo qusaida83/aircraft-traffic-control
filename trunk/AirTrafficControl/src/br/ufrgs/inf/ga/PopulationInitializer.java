@@ -2,6 +2,8 @@ package br.ufrgs.inf.ga;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import br.ufrgs.inf.atc.model.Aircraft;
@@ -43,8 +45,8 @@ public class PopulationInitializer {
 	/**
 	 * initializes the population and make the first fitness evaluation. 
 	 */
-	public Population<Individual> createPopulation() {
-		Set<Individual> individuals = new HashSet<Individual>();
+	public Population createPopulation() {
+		List<Individual> individuals = new LinkedList<Individual>();
 		
 		// Add an individual where it's landing sequence is sorted by the aircrafts target time.
 		// If every aircraft lands at it's target time, it would be the best case, where the cost is zero.
@@ -56,7 +58,7 @@ public class PopulationInitializer {
 			individuals.add(createRandomIndividual());
 		}
 		
-		return new Population<Individual>(individuals);
+		return new Population(individuals);
 	}
 	
 	/**
