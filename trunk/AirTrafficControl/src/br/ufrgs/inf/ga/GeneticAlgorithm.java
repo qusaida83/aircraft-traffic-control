@@ -89,7 +89,7 @@ public class GeneticAlgorithm {
 	 * initializes the population and make the first fitness evaluation. 
 	 */
 	protected void initializePopulation() {
-		this.population = populationInitializer.createPopulation(fitnessCalculator);
+		this.population = populationInitializer.createPopulation();
 	}
 	
 	protected void mutate() {

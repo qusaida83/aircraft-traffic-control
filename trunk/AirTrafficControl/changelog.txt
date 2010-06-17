@@ -1,7 +1,19 @@
-TODOS:
-
-1) Implements the FitnessCalculator class.
-2) Implements the ParentSelector Genetic Operator.
-3) Implements the Reproduction Genetic Operator.
-4) Implements the Mutation Genetic Operator.
-5) Implements the
+17/06/2010 11:28 (Thu Jun) Diego
+	
+	*******************
+	* br.ufrgs.inf.ga *
+	*******************
+	
+	* A lot of the genetic algorithm core was implemented!
+	* PopulationInitializer.java - completed, but need to implement unit tests.
+	* GeneticAlgotithm.java 	 - uncompleted
+	* FitnessCalculator.java	 - uncompleted, need to implement the calculator function (using punishment principle for bad solutions).
+	* ShuffleHelper.java		 - completed - utils class to shuffle an aircraft landing sequence vector. 
+	
+	********************
+	* br.ufrgs.inf.atc *
+	********************
+	
+	* AtcLoader.java 		 	 - completed, but need to implement unit tests.
+	* AirTrafficControl.java 	 - uncompleted, need to implement the schedule method using the GA core!
+	

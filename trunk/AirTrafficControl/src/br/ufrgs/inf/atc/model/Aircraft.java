@@ -58,7 +58,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 		}
 		
 		Aircraft that = (Aircraft) obj;
-		if (this.getAircraftId() == that.getAircraftId() &&
+		if (this.getId() == that.getId() &&
 			this.getAppearanceTime() == that.getAppearanceTime() &&
 			this.getEarliestLandingTime() == that.getEarliestLandingTime() &&
 			this.getLandingAfterTargetTimePenaltyCost() == that.getLandingAfterTargetTimePenaltyCost() &&
@@ -90,6 +90,28 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 		Aircraft aircraft = new Aircraft(staticData);
 		aircraft.setLandingTime(landingTime);
 		return aircraft;
+	}
+	
+	/**
+	 * Checks if this aircraft landing time (let call it xj) respects the restriction xj >= xi + Sij.
+	 * Where xi is the landing time of the previous aircraft and
+	 * 		 Sij is the minimal gap time that xj must wait after the xi landing.
+	 * 
+	 * @param previousAircraft aircraft that landed first this one (xi).
+	 * @return true if this landing time respects the restriction. false otherwise.
+	 */
+	public boolean respectsTheGapTimeBetween(Aircraft previousAircraft) {
+		return this.getLandingTime() >= previousAircraft.getLandingTime() + this.getGapTimeBetween(previousAircraft);
+	}
+	
+	/**
+	 * Return the gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
+	 * 
+	 * @param otherAircraftId if of other aircraft.
+	 * @return The gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
+	 */
+	public int getGapTimeBetween(Aircraft otherAircraft) {
+		return staticData.getGapTimeBetweenLandings()[otherAircraft.getId()];
 	}
 	
 	public int getLandingTime() {
@@ -127,18 +149,8 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	public int[] getGapTimeBetweenLandings() {
 		return staticData.getGapTimeBetweenLandings();
 	}
-	
-	/**
-	 * Return the gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
-	 * 
-	 * @param otherAircraftId if of other aircraft.
-	 * @return The gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
-	 */
-	public int getGapTimeBetweenAircraft(int otherAircraftId) {
-		return staticData.getGapTimeBetweenLandings()[otherAircraftId];
-	}
 
-	public int getAircraftId() {
+	public int getId() {
 		return staticData.getAircraftId();
 	}
 
