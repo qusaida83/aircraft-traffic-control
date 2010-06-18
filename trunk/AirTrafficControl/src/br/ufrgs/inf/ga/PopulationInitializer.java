@@ -1,10 +1,9 @@
 package br.ufrgs.inf.ga;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import br.ufrgs.inf.atc.model.Aircraft;
 import br.ufrgs.inf.atc.model.AircraftStaticData;
@@ -30,14 +29,14 @@ public class PopulationInitializer {
 	/**
 	 * Fitness calculator to evaluate the adeptness of a generated individual of the population.
 	 */
-	private final FitnessCalculator fitnessCalculator;
+	private final FitnessEvaluator fitnessCalculator;
 	
 	/**
 	 * Resolve the class dependencies.
 	 * 
 	 * @param aircraftsStaticData The aircrafts static data for a specific ATC problem instance loaded from the file.
 	 */
-	public PopulationInitializer(final AircraftStaticData[] aircraftsStaticData, final FitnessCalculator fitnessCalculator) {
+	public PopulationInitializer(final AircraftStaticData[] aircraftsStaticData, final FitnessEvaluator fitnessCalculator) {
 		this.aircraftsStaticData = aircraftsStaticData;
 		this.fitnessCalculator = fitnessCalculator;
 	}
@@ -53,14 +52,19 @@ public class PopulationInitializer {
 		// So, this sequence is a good one to add in the population always!
 		individuals.add(createIndividualSortedByTargetTimes());
 		
+		// Add an individual where it's landing sequence was sorted by the aircrafts penalty cost for landing after target time.
+		// This way, we try to assign a optimal landing time for those aircrafts with the higher penalty costs... doing this,
+		// we ensure many as possible optimal landing times for aircrafts with higher penalty costs.
+		individuals.add(createIndividualSortedByPenaltyCost());
+		
 		// Generates randomly the rest of the population.
-		for (int i = 1; i < Population.MAX_INDIVIDUALS; i++) {
+		for (int i = individuals.size(); i < Population.MAX_INDIVIDUALS; i++) {
 			individuals.add(createRandomIndividual());
 		}
 		
 		return new Population(individuals);
 	}
-	
+
 	/**
 	 * Creates a random population individual.
 	 * 
@@ -71,6 +75,11 @@ public class PopulationInitializer {
 		return createIndividualForLandingSequence(landingSequence);
 	}
 	
+	private Individual createIndividualSortedByPenaltyCost() {
+		Aircraft[] landingSequence = createLandingSequenceSortedByPenaltyCost();
+		return createIndividualForLandingSequence(landingSequence);
+	}
+
 	/**
 	 * Creates an individual where the landing sequence was sorted by the aircrafts target times.
 	 * 
@@ -104,7 +113,7 @@ public class PopulationInitializer {
 		}
 		
 		// At this point, the aircreftLandingSequence vector still ordered by the aircrafts landing time parameter. So, no sort is needed here!
-		int fitnessValue = fitnessCalculator.calculate(aircraftLandingSequence);
+		int fitnessValue = fitnessCalculator.evaluate(aircraftLandingSequence);
 		return new Individual(aircraftLandingSequence, fitnessValue);
 	}
 	
@@ -119,6 +128,32 @@ public class PopulationInitializer {
 		Aircraft[] aircraftLandingSequence = createAircraftsWithDefaultLandingTime();
 		// sort the list of aircraft by it's landing time to generate the landing sequence.
 		Arrays.sort(aircraftLandingSequence);
+
+		return aircraftLandingSequence;
+	}
+	
+	/**
+	 * Creates a landing sequence ordered by an aircraft penalty cost for landing after the target time.
+	 * @return 
+	 */
+	private Aircraft[] createLandingSequenceSortedByPenaltyCost() {
+		// Creates a landing sequence where for each aircraft, it's landing time is close as possible to it's target time.
+		Aircraft[] aircraftLandingSequence = createAircraftsWithDefaultLandingTime();
+		// sort the list of aircraft by it's penalty cost for landing after target time.
+		Arrays.sort(aircraftLandingSequence, new Comparator<Aircraft>() {
+
+			@Override
+			public int compare(Aircraft aircraft1, Aircraft aircraft2) {
+				if (aircraft1.getLandingAfterTargetTimePenaltyCost() > aircraft2.getLandingAfterTargetTimePenaltyCost()) {
+					return 1;
+				} else if (aircraft1.getLandingAfterTargetTimePenaltyCost() < aircraft2.getLandingAfterTargetTimePenaltyCost()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+			
+		});
 
 		return aircraftLandingSequence;
 	}

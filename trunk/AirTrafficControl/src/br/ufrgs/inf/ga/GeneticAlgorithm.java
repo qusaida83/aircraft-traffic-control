@@ -30,7 +30,7 @@ public class GeneticAlgorithm {
 	/**
 	 * Calculator for the fitness value of an individual in the population.
 	 */
-	private final FitnessCalculator fitnessCalculator;
+	private final FitnessEvaluator fitnessCalculator;
 	
 	/**
 	 * Population where each individual represents a solution for the problem that is been solved.
@@ -48,7 +48,7 @@ public class GeneticAlgorithm {
 	 * @param populationInitializer population initializer instance.
 	 * @param fitnessCalculator fitness calculator instance.
 	 */
-	public GeneticAlgorithm(PopulationInitializer populationInitializer, FitnessCalculator fitnessCalculator) {
+	public GeneticAlgorithm(PopulationInitializer populationInitializer, FitnessEvaluator fitnessCalculator) {
 		this.populationInitializer = populationInitializer;
 		this.fitnessCalculator = fitnessCalculator;
 	}
@@ -90,6 +90,7 @@ public class GeneticAlgorithm {
 	 */
 	protected void initializePopulation() {
 		this.population = populationInitializer.createPopulation();
+		System.out.println(population.getTheMostAdaptedIndividual());
 	}
 	
 	protected void mutate() {

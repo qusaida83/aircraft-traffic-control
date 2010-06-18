@@ -110,6 +110,53 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	}
 	
 	/**
+	 * Checks if the aircraft landing time belongs to the range [earliestLandingTime .. latestLandingTime]
+	 * 
+	 * @return true if the aircraft landing time belongs to the landing time window. false otherwise.
+	 */
+	public boolean landingTimeIsInLandingTimeWindow() {
+		if (this.getLandingTime() >= this.getEarliestLandingTime() &&
+			this.getLandingTime() <= this.getLatestLandingTime()) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Retrieves the time units that the aircraft has landed after the target time.
+	 * 
+	 * @return the time units that the aircraft has landed after the target time
+	 */
+	public int getTimeUnitsAfterTargetTime() {
+		int timeUnits = this.getLandingTime() - this.getTargetLandingTime();
+		
+		// timeUnits < 0 implies that the aircraft has landed before the target time.
+		// so, the time units after target time is zero!
+		if (timeUnits < 0) {
+			return 0;
+		}
+		
+		return timeUnits;
+	}
+	
+	/**
+	 * Retrieves the time units that the aircraft has landed after the target time.
+	 * 
+	 * @return the time units that the aircraft has landed after the target time
+	 */
+	public int getTimeUnitsBeforeTargetTime() {
+		int timeUnits = this.getTargetLandingTime() - this.getLandingTime();
+		
+		// timeUnits < 0 implies that the aircraft has landed after the target time.
+		// so, the time units after target time is zero!
+		if (timeUnits < 0) {
+			return 0;
+		}
+		
+		return timeUnits;
+	}
+	
+	/**
 	 * Return the gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
 	 * 
 	 * @param otherAircraftId if of other aircraft.

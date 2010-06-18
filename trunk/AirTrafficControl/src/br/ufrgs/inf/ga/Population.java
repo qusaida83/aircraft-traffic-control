@@ -18,7 +18,7 @@ public class Population implements Iterable<Individual> {
 	/**
 	 * Max number of individuals in the population.
 	 */
-	public static final int MAX_INDIVIDUALS = 200;
+	public static final int MAX_INDIVIDUALS = 1000;
 	
 	/**
 	 * Set of individuals of the population.

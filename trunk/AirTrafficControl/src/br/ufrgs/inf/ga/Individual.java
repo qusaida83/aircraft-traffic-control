@@ -61,7 +61,7 @@ public class Individual implements Comparable<Individual> {
 	
 	@Override
 	public String toString() {
-		return "Fitness value: " + this.fitnessValue + ", Landing sequence: " + aircraftLandingSequence;
+		return "Fitness value: " + this.fitnessValue + ", Landing sequence: " + aircraftLandingSequence + "\n";
 	}
 
 	/**
@@ -70,9 +70,9 @@ public class Individual implements Comparable<Individual> {
 	 */
 	@Override
 	public int compareTo(Individual o) {
-		if (this.getFitnessValue() < o.getFitnessValue()) {
+		if (this.getFitnessValue() > o.getFitnessValue()) {
 			return 1;
-		} else if (this.getFitnessValue() > o.getFitnessValue()) {
+		} else if (this.getFitnessValue() < o.getFitnessValue()) {
 			return -1;
 		} else {
 			return 0;
