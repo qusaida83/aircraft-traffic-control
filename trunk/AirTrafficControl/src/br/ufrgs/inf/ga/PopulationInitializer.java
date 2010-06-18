@@ -7,6 +7,8 @@ import java.util.List;
 
 import br.ufrgs.inf.atc.model.Aircraft;
 import br.ufrgs.inf.atc.model.AircraftStaticData;
+import br.ufrgs.inf.ga.model.Individual;
+import br.ufrgs.inf.ga.model.Population;
 import br.ufrgs.inf.ga.utils.ShuffleHelper;
 
 /**
@@ -35,10 +37,11 @@ public class PopulationInitializer {
 	 * Resolve the class dependencies.
 	 * 
 	 * @param aircraftsStaticData The aircrafts static data for a specific ATC problem instance loaded from the file.
+	 * @param fitnessEvaluator used to evaluate the adaptedness of an individual
 	 */
-	public PopulationInitializer(final AircraftStaticData[] aircraftsStaticData, final FitnessEvaluator fitnessCalculator) {
+	public PopulationInitializer(final AircraftStaticData[] aircraftsStaticData, final FitnessEvaluator fitnessEvaluator) {
 		this.aircraftsStaticData = aircraftsStaticData;
-		this.fitnessCalculator = fitnessCalculator;
+		this.fitnessCalculator = fitnessEvaluator;
 	}
 	
 	/**
@@ -62,6 +65,8 @@ public class PopulationInitializer {
 			individuals.add(createRandomIndividual());
 		}
 		
+		//System.out.println(individuals);
+		
 		return new Population(individuals);
 	}
 
@@ -75,6 +80,11 @@ public class PopulationInitializer {
 		return createIndividualForLandingSequence(landingSequence);
 	}
 	
+	/**
+	 * Creates an individual with a landing sequence that was ordered by an aircraft penalty cost for landing after the target time.
+	 * 
+	 * @return an individual
+	 */
 	private Individual createIndividualSortedByPenaltyCost() {
 		Aircraft[] landingSequence = createLandingSequenceSortedByPenaltyCost();
 		return createIndividualForLandingSequence(landingSequence);
@@ -107,7 +117,7 @@ public class PopulationInitializer {
 				if (!currentAircraft.respectsTheGapTimeBetween(previousAircraft)) {
 					// If the current aircraft landing time does not respects the restriction, then, this current landing time will be
 					// the previous landing time plus the gap time needed to landing.
-					currentAircraft.setLandingTime(previousAircraft.getLandingTime() + currentAircraft.getGapTimeBetween(previousAircraft));
+					currentAircraft.setMinLandingTimeAfterLandingOf(previousAircraft);
 				}
 			}	
 		}
@@ -134,19 +144,21 @@ public class PopulationInitializer {
 	
 	/**
 	 * Creates a landing sequence ordered by an aircraft penalty cost for landing after the target time.
-	 * @return 
+	 * 
+	 * @return landing sequence ordered by penalty costs.
 	 */
 	private Aircraft[] createLandingSequenceSortedByPenaltyCost() {
 		// Creates a landing sequence where for each aircraft, it's landing time is close as possible to it's target time.
 		Aircraft[] aircraftLandingSequence = createAircraftsWithDefaultLandingTime();
+
 		// sort the list of aircraft by it's penalty cost for landing after target time.
 		Arrays.sort(aircraftLandingSequence, new Comparator<Aircraft>() {
 
 			@Override
 			public int compare(Aircraft aircraft1, Aircraft aircraft2) {
-				if (aircraft1.getLandingAfterTargetTimePenaltyCost() > aircraft2.getLandingAfterTargetTimePenaltyCost()) {
+				if (aircraft1.getLandingAfterTargetTimePenaltyCost() < aircraft2.getLandingAfterTargetTimePenaltyCost()) {
 					return 1;
-				} else if (aircraft1.getLandingAfterTargetTimePenaltyCost() < aircraft2.getLandingAfterTargetTimePenaltyCost()) {
+				} else if (aircraft1.getLandingAfterTargetTimePenaltyCost() > aircraft2.getLandingAfterTargetTimePenaltyCost()) {
 					return -1;
 				} else {
 					return 0;

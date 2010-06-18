@@ -94,7 +94,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	
 	@Override
 	public String toString() {
-		return "Aircraft " + this.getId() + " (landing time: " + this.getLandingTime() + ", target time: " + this.getTargetLandingTime() + ", diff: " + (this.getTargetLandingTime() - this.getLandingTime()) + ")";
+		return " (X" + this.getId() + ": " + this.getLandingTime() + ", T" + this.getId() + ": " + this.getTargetLandingTime() + ", E" + this.getId() + ": " + this.getEarliestLandingTime() + ", L" + this.getId() + ": " + this.getLatestLandingTime() + ") ";
 	}
 	
 	/**
@@ -164,6 +164,15 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 */
 	public int getGapTimeBetween(Aircraft otherAircraft) {
 		return staticData.getGapTimeBetweenLandings()[otherAircraft.getId()];
+	}
+	
+	/**
+	 * Sets the minimal landing time after a landing of a previous aircraft.
+	 * 
+	 * @param previousAircraft the aircraft that landed before this one.
+	 */
+	public void setMinLandingTimeAfterLandingOf(Aircraft previousAircraft) {
+		this.setLandingTime(previousAircraft.getLandingTime() + this.getGapTimeBetween(previousAircraft));
 	}
 	
 	public int getLandingTime() {

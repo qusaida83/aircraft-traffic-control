@@ -1,8 +1,9 @@
-package br.ufrgs.inf.ga;
+package br.ufrgs.inf.ga.model;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
 
 /**
  * Implements a Genetic Algorithm Population.
@@ -18,7 +19,17 @@ public class Population implements Iterable<Individual> {
 	/**
 	 * Max number of individuals in the population.
 	 */
-	public static final int MAX_INDIVIDUALS = 1000;
+	public static final int MAX_INDIVIDUALS = 10000;
+	
+	/**
+	 * Reproduction rate for this population.
+	 */
+	public static final float REPRODUCTION_RATE = 0.5f;
+	
+	/**
+	 * Mutation rate for this population.
+	 */
+	public static final float MUTATION_RATE = 0.1f;
 	
 	/**
 	 * Set of individuals of the population.

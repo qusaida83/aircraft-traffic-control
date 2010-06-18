@@ -1,6 +1,9 @@
 package br.ufrgs.inf.ga;
 
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
+import br.ufrgs.inf.ga.model.Individual;
+import br.ufrgs.inf.ga.model.Population;
+import br.ufrgs.inf.ga.operators.SelectionOperator;
 
 /**
  * Genetic Algorithm Class.
@@ -33,6 +36,11 @@ public class GeneticAlgorithm {
 	private final FitnessEvaluator fitnessCalculator;
 	
 	/**
+	 * Operator used to select parents to a reproduction process.
+	 */
+	private final SelectionOperator selectionOperator;
+	
+	/**
 	 * Population where each individual represents a solution for the problem that is been solved.
 	 */
 	private Population population;
@@ -51,6 +59,7 @@ public class GeneticAlgorithm {
 	public GeneticAlgorithm(PopulationInitializer populationInitializer, FitnessEvaluator fitnessCalculator) {
 		this.populationInitializer = populationInitializer;
 		this.fitnessCalculator = fitnessCalculator;
+		this.selectionOperator = new SelectionOperator();
 	}
 	
 	/**
@@ -80,9 +89,21 @@ public class GeneticAlgorithm {
 		}
 	}
 	
+	/**
+	 * Verify if the best individual in the current generation is better than the global one found so far.
+	 */
 	private void findTheBestIndividualInCurrentGeneration() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
+		// The best individual found in this population.
+		Individual generationBestIndividual = population.getTheMostAdaptedIndividual();
+		
+		// if the best individual in this generation is more adapted than the global best individual so far,
+		// than, the best individual in this generation becomes the global best individual.
+		if (this.bestIndividual == null) {
+			this.bestIndividual = generationBestIndividual;
+		} else if (!this.bestIndividual.isMoreAdaptedThan(generationBestIndividual)) {
+			this.bestIndividual = generationBestIndividual;
+		}
+		
 	}
 
 	/**
@@ -90,7 +111,7 @@ public class GeneticAlgorithm {
 	 */
 	protected void initializePopulation() {
 		this.population = populationInitializer.createPopulation();
-		System.out.println(population.getTheMostAdaptedIndividual());
+		//System.out.println(population.getTheMostAdaptedIndividual());
 	}
 	
 	protected void mutate() {
