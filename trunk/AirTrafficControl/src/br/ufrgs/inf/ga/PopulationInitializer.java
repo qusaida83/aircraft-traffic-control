@@ -34,14 +34,20 @@ public class PopulationInitializer {
 	private final FitnessEvaluator fitnessCalculator;
 	
 	/**
+	 * Responsible for schedule a time for each aircraft in a landing sequence.
+	 */
+	private final LandingTimeScheduler scheduler;
+	
+	/**
 	 * Resolve the class dependencies.
 	 * 
 	 * @param aircraftsStaticData The aircrafts static data for a specific ATC problem instance loaded from the file.
 	 * @param fitnessEvaluator used to evaluate the adaptedness of an individual
 	 */
-	public PopulationInitializer(final AircraftStaticData[] aircraftsStaticData, final FitnessEvaluator fitnessEvaluator) {
+	public PopulationInitializer(final AircraftStaticData[] aircraftsStaticData, final FitnessEvaluator fitnessEvaluator, final LandingTimeScheduler scheduler) {
 		this.aircraftsStaticData = aircraftsStaticData;
 		this.fitnessCalculator = fitnessEvaluator;
+		this.scheduler = scheduler;
 	}
 	
 	/**
@@ -107,20 +113,8 @@ public class PopulationInitializer {
 	 * @return a population individual (landing sequence and it fitness value).
 	 */
 	private Individual createIndividualForLandingSequence(final Aircraft[] aircraftLandingSequence) {		
-		for (int i = 0; i < aircraftLandingSequence.length; i++) {
-			// The first aircraft landing time can be it's target time once it don't have to wait for any other aircraft to landing first.
-			// So, for any other aircraft landing after the first one, we need to ensure that the time of landing is, at least,
-			// the time of the previous landing plus the gap time needed to landing.
-			if (i != 0) {
-				Aircraft previousAircraft = aircraftLandingSequence[i - 1];
-				Aircraft currentAircraft = aircraftLandingSequence[i];
-				if (!currentAircraft.respectsTheGapTimeBetween(previousAircraft)) {
-					// If the current aircraft landing time does not respects the restriction, then, this current landing time will be
-					// the previous landing time plus the gap time needed to landing.
-					currentAircraft.setMinLandingTimeAfterLandingOf(previousAircraft);
-				}
-			}	
-		}
+		// Schedules the landing times for each aircraft in the landing sequence.
+		scheduler.schedule(aircraftLandingSequence);
 		
 		// At this point, the aircreftLandingSequence vector still ordered by the aircrafts landing time parameter. So, no sort is needed here!
 		int fitnessValue = fitnessCalculator.evaluate(aircraftLandingSequence);

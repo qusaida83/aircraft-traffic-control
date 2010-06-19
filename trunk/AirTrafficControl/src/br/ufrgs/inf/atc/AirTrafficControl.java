@@ -3,6 +3,7 @@ package br.ufrgs.inf.atc;
 import br.ufrgs.inf.atc.model.AircraftStaticData;
 import br.ufrgs.inf.ga.FitnessEvaluator;
 import br.ufrgs.inf.ga.GeneticAlgorithm;
+import br.ufrgs.inf.ga.LandingTimeScheduler;
 import br.ufrgs.inf.ga.PopulationInitializer;
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 
@@ -36,9 +37,8 @@ public class AirTrafficControl {
 	 * @throws AlgorithmException 
 	 */
 	public void scheduleAircraftsLandings() throws AlgorithmException {
-		FitnessEvaluator fc = new FitnessEvaluator();
-		PopulationInitializer pi = new PopulationInitializer(aircrafts, fc);
-		GeneticAlgorithm ga = new GeneticAlgorithm(pi, fc);
+		GeneticAlgorithm ga = new GeneticAlgorithm(aircrafts);
 		ga.execute();
+
 	}
 }

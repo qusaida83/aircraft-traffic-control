@@ -86,7 +86,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	}
 	
 	@Override
-	public Aircraft clone() throws CloneNotSupportedException {
+	public Aircraft clone() {
 		Aircraft aircraft = new Aircraft(staticData);
 		aircraft.setLandingTime(landingTime);
 		return aircraft;
@@ -105,7 +105,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 * @param previousAircraft aircraft that landed first this one (xi).
 	 * @return true if this landing time respects the restriction. false otherwise.
 	 */
-	public boolean respectsTheGapTimeBetween(Aircraft previousAircraft) {
+	public boolean respectsGapTimeBetween(Aircraft previousAircraft) {
 		return this.getLandingTime() >= previousAircraft.getLandingTime() + this.getGapTimeBetween(previousAircraft);
 	}
 	

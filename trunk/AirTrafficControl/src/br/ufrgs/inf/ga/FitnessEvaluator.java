@@ -50,7 +50,7 @@ public class FitnessEvaluator {
 			 */
 			if (i != 0) {
 				Aircraft previousAircraft = aircraftLandingSequence[i - 1]; 
-				if (!aircraft.respectsTheGapTimeBetween(previousAircraft)) {
+				if (!aircraft.respectsGapTimeBetween(previousAircraft)) {
 					// Invalid solution! The cost is realy high!
 					return Integer.MAX_VALUE;
 				}

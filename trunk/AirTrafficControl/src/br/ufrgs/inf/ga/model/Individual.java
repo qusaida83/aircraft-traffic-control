@@ -29,17 +29,7 @@ public class Individual implements Comparable<Individual> {
 	/**
 	 *  fitness value (adaptation factor for this individual in the population).
 	 */
-	private final int fitnessValue;
-	
-	/**
-	 * Executes the crossover operator in a reproduction process.
-	 */
-	private final CrossoverOperator crossoverOperator = new CrossoverOperator();
-	
-	/**
-	 * Executes a mutation operation.
-	 */
-	private final MutationOperator mutationOperator = new MutationOperator();
+	private int fitnessValue;
 	
 	/**
 	 * Initializes the individual data.
@@ -47,7 +37,7 @@ public class Individual implements Comparable<Individual> {
 	 * @param aircraftLandingSequence Sequence of landings that represents a solution (valid or not) for the genetic problem.
 	 * @param fitnessValue fitness value that tell us how good this solution is for the ATC problem instance.
 	 */
-	public Individual(final Aircraft[] aircraftLandingSequence, final int fitnessValue) {
+	public Individual(final Aircraft[] aircraftLandingSequence, int fitnessValue) {
 		this.aircraftLandingSequence = aircraftLandingSequence;
 		this.fitnessValue = fitnessValue;
 	}
@@ -58,6 +48,10 @@ public class Individual implements Comparable<Individual> {
 
 	public int getFitnessValue() {
 		return fitnessValue;
+	}
+	
+	public void setFitnessValue(int fitnessValue) {
+		this.fitnessValue = fitnessValue;
 	}
 	
 	/**
@@ -103,6 +97,34 @@ public class Individual implements Comparable<Individual> {
 			return -1;
 		} else {
 			return 0;
+		}
+	}
+
+	@Override
+	public Individual clone() {
+		return new Individual(getLandingSequenceCopy(), this.fitnessValue);
+	}
+	
+	/**
+	 * Creates a copy vector of the landing sequence.
+	 * @return copy vector of the landing sequence.
+	 */
+	private Aircraft[] getLandingSequenceCopy() {
+		Aircraft[] landingSequenceCopy = new Aircraft[aircraftLandingSequence.length];
+
+		for (int i = 0; i < aircraftLandingSequence.length; i ++) {
+			landingSequenceCopy[i] = aircraftLandingSequence[i].clone();
+		}
+		
+		return landingSequenceCopy;
+	}
+	
+	/**
+	 * Sets for each aircraft in the landing sequence the best landing time (target time).
+	 */
+	public void setBestLandingTimeForEachAircraft() {
+		for (Aircraft aircraft : aircraftLandingSequence) {
+			aircraft.setBestLandingTime();
 		}
 	}
 }

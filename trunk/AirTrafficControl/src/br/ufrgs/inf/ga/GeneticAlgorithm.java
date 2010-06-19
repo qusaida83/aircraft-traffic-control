@@ -1,8 +1,14 @@
 package br.ufrgs.inf.ga;
 
+import java.util.List;
+
+import br.ufrgs.inf.atc.model.AircraftStaticData;
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 import br.ufrgs.inf.ga.model.Individual;
+import br.ufrgs.inf.ga.model.Parents;
 import br.ufrgs.inf.ga.model.Population;
+import br.ufrgs.inf.ga.operators.CrossoverOperator;
+import br.ufrgs.inf.ga.operators.MutationOperator;
 import br.ufrgs.inf.ga.operators.SelectionOperator;
 
 /**
@@ -30,15 +36,25 @@ public class GeneticAlgorithm {
 	 */
 	private final PopulationInitializer populationInitializer;
 	
-	/**
+	/**this.selectionOperator = new SelectionOperator();
 	 * Calculator for the fitness value of an individual in the population.
 	 */
-	private final FitnessEvaluator fitnessCalculator;
+	private final FitnessEvaluator fitnessEvaluator;
 	
 	/**
 	 * Operator used to select parents to a reproduction process.
 	 */
-	private final SelectionOperator selectionOperator;
+	private final SelectionOperator selectionOperator = new SelectionOperator();
+	
+	/**
+	 * Executes the crossover operator in a reproduction process.
+	 */
+	private final CrossoverOperator crossoverOperator;
+	
+	/**
+	 * Executes a mutation operation.
+	 */
+	private final MutationOperator mutationOperator;
 	
 	/**
 	 * Population where each individual represents a solution for the problem that is been solved.
@@ -46,22 +62,32 @@ public class GeneticAlgorithm {
 	private Population population;
 	
 	/**
+	 * Parents selected by the {@link SelectionOperator} for reproduction.
+	 */
+	private List<Parents> selectedParents;
+	
+	/**
 	 * The best individual found at the end of the algorithm execution.
 	 */
 	private Individual bestIndividual;
 	
 	/**
-	 * Resolves the dependencies of this class.
-	 * 
-	 * @param populationInitializer population initializer instance.
-	 * @param fitnessCalculator fitness calculator instance.
+	 * Counts how many generations that none best solution is found.
 	 */
-	public GeneticAlgorithm(PopulationInitializer populationInitializer, FitnessEvaluator fitnessCalculator) {
-		this.populationInitializer = populationInitializer;
-		this.fitnessCalculator = fitnessCalculator;
-		this.selectionOperator = new SelectionOperator();
-	}
+	private int generationsWithoutImprovement = 0;
 	
+	/**
+	 * Initializes the dependencies.
+	 * @param aircrafts aircrafts data loaded from an input file used to create the population for the algorithm.
+	 */
+	public GeneticAlgorithm(AircraftStaticData[] aircrafts) {
+		LandingTimeScheduler scheduler = new LandingTimeScheduler();
+		this.fitnessEvaluator = new FitnessEvaluator();
+		this.populationInitializer = new PopulationInitializer(aircrafts, fitnessEvaluator, scheduler);
+		this.crossoverOperator = new CrossoverOperator(scheduler, fitnessEvaluator);
+		this.mutationOperator = new MutationOperator(scheduler, fitnessEvaluator);
+	}
+
 	/**
 	 * Executes the algorithm.
 	 * @throws AlgorithmException thrown if anything bad happens.
@@ -74,12 +100,17 @@ public class GeneticAlgorithm {
 			int generation = 1;
 			
 			// The algorithm stop condition
-			while(!solutionFound() && generation < MAX_GENERATION) {				
+			while(!solutionFound() && generation < MAX_GENERATION) {
+				System.out.println("### generation " + generation);
+				
+				// swap the global best individual so far for the best individual of the current
+				// generation, if this last one is better!
 				findTheBestIndividualInCurrentGeneration();
+				
+				// generating the next generation
 				selectParentsForReproduction();
 				reproduct();
 				mutate();
-				fitnessCalculation();
 				
 				// next generation...
 				generation++;
@@ -94,7 +125,9 @@ public class GeneticAlgorithm {
 	 */
 	private void findTheBestIndividualInCurrentGeneration() {
 		// The best individual found in this population.
-		Individual generationBestIndividual = population.getTheMostAdaptedIndividual();
+		Individual generationBestIndividual = population.getMostAdaptedIndividual();
+		System.out.println("#### generation best individual: " + generationBestIndividual);
+		System.out.println("#### global best individual: " + bestIndividual);
 		
 		// if the best individual in this generation is more adapted than the global best individual so far,
 		// than, the best individual in this generation becomes the global best individual.
@@ -102,6 +135,10 @@ public class GeneticAlgorithm {
 			this.bestIndividual = generationBestIndividual;
 		} else if (!this.bestIndividual.isMoreAdaptedThan(generationBestIndividual)) {
 			this.bestIndividual = generationBestIndividual;
+			generationsWithoutImprovement = 0;
+		} else {
+			// counts how many generations none global best solution is found.
+			generationsWithoutImprovement++;
 		}
 		
 	}
@@ -111,35 +148,59 @@ public class GeneticAlgorithm {
 	 */
 	protected void initializePopulation() {
 		this.population = populationInitializer.createPopulation();
-		//System.out.println(population.getTheMostAdaptedIndividual());
+	}
+	
+	/**
+	 * Selects a list of parents to reproduction and generation of new individuals.
+	 */
+	protected void selectParentsForReproduction() {
+		this.selectedParents = selectionOperator.selectParents(population);
+	}
+
+	/**
+	 * Execute the reproduction operation.
+	 * This process generates a new individual for each parents reproduction.
+	 * This son can join the population by
+	 */
+	protected void reproduct() {
+		for (Parents parents : selectedParents) {
+			Individual son = crossoverOperator.execute(parents);
+			Individual lessAdaptedParent = parents.getLessAdaptedParent();
+			if (son.isMoreAdaptedThan(lessAdaptedParent)) {
+				population.replace(son, lessAdaptedParent);
+			}
+		}
 	}
 	
 	protected void mutate() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
-	}
-
-	protected void reproduct() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
-	}
-
-	protected void selectParentsForReproduction() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
-	}
-
-	protected void fitnessCalculation() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
+		int n = (int)(Population.MAX_INDIVIDUALS * Population.MUTATION_RATE);
+		int mutationStartIndex = (int)(Population.MAX_INDIVIDUALS * 0.5f);
+		population.sortByFitness();
+		
+		// Executes n randomly mutations in individuals starting from the middle of the sorted population to the end.
+		for (int i = 0; i < n; i++) {
+			// generates a random index between mutationStartIndex and the size of the population.
+			// TODO verify the correctness of this calculus
+			int individualToBeMutatedIndex = mutationStartIndex + (int) (Math.random() * (Population.MAX_INDIVIDUALS - mutationStartIndex));
+			Individual individualToBeMutated = population.get(individualToBeMutatedIndex);
+			mutationOperator.execute(individualToBeMutated);
+		}
 	}
 	
 	/**
 	 * Verify the stop condition of the algorithm.
+	 * 
+	 * <p>
+	 * If has been a long time since the last solution improvement, probably no improvement at all will occur, so we choose to stop the algorithm. 
+	 * </p>
+	 * 
 	 * @return true if the stop condition is reached, false otherwise.
 	 */
 	protected boolean solutionFound() {
-		// TODO implement...
-		throw new RuntimeException("Not implemented!");
+		if (generationsWithoutImprovement > GeneticAlgorithm.MAX_GENERATION * 2/3) {
+			return true;
+		}
+		
+		return false;
 	}
 }

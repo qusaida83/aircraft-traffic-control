@@ -23,4 +23,12 @@ public class Parents {
 	public Individual getParent2() {
 		return parent2;
 	}
+	
+	/**
+	 * Retrieve the less adapted parent.
+	 * @return less adapted parent.
+	 */
+	public Individual getLessAdaptedParent() {
+		return (parent1.isMoreAdaptedThan(parent2) ? parent2 : parent1);
+	}
 }

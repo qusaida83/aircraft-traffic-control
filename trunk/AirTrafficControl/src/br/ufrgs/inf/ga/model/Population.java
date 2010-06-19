@@ -37,6 +37,12 @@ public class Population implements Iterable<Individual> {
 	private final List<Individual> individuals;
 	
 	/**
+	 * Flag that tell us if the population is sorted by individual fitness value.
+	 * This is good to avoid unnecessary population sorting.
+	 */
+	private boolean sorted = false;
+	
+	/**
 	 * Resolves the class dependencies.
 	 * 
 	 * @param individuals Set of individuals in the population.
@@ -51,6 +57,7 @@ public class Population implements Iterable<Individual> {
 	 */
 	public void add(Individual individual) {
 		this.individuals.add(individual);
+		this.sorted = false;
 	}
 	
 	/**
@@ -58,11 +65,20 @@ public class Population implements Iterable<Individual> {
 	 * In this implementation, a individual with lower fitness value is more adapted than other one with a higher fitness value. 
 	 * @return
 	 */
-	public Individual getTheMostAdaptedIndividual() {
-		Collections.sort(individuals);
+	public Individual getMostAdaptedIndividual() {
+		this.sortByFitness();
 		// the first individual in the sorted list have the lower fitness value,
 		// and this is the best one, once we trying to minimize the cost of sequence landings.
 		return individuals.get(0);
+	}
+	
+	/**
+	 * Retrieve the worse individual in population.
+	 * @return the less adapted individual in population.
+	 */
+	public Individual getLessAdaptedIndividual() {
+		this.sortByFitness();
+		return individuals.get(individuals.size() - 1);
 	}
 	
 	/**
@@ -76,5 +92,44 @@ public class Population implements Iterable<Individual> {
 	@Override
 	public Iterator<Individual> iterator() {
 		return individuals.iterator();
+	}
+	
+	/**
+	 * sorts the population by individual fitness value.
+	 */
+	public void sortByFitness() {
+		if (!this.sorted) {
+			Collections.sort(this.individuals);
+		}
+	}
+	
+	public Individual get(int individualIndex) {
+		return individuals.get(individualIndex);
+	}
+	
+	/**
+	 * Replace this an individual by one with the worse fitness value in population.
+	 * The replacement is only done if the worse individual in population is either less
+	 * adapted than the individual to be added in population.
+	 * 
+	 * @param individual individual to be added in population.
+	 */
+	public void replaceWithLessAdaptedIndividual(Individual individual) {
+		Individual worsePopulationIndividual = getLessAdaptedIndividual();
+		if (individual.isMoreAdaptedThan(worsePopulationIndividual)) {
+			this.remove(worsePopulationIndividual);
+			this.add(individual);
+		}
+	}
+	
+	/**
+	 * Replaces an individual by other one in population.
+	 * 
+	 * @param newIndividual the individual to be added in population.
+	 * @param individualToBeRemoved the individual to be removed from population.
+	 */
+	public void replace(Individual newIndividual, Individual individualToBeRemoved) {
+		this.remove(individualToBeRemoved);
+		this.add(newIndividual);
 	}
 }
