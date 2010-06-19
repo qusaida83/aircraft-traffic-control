@@ -11,6 +11,32 @@ import br.ufrgs.inf.atc.model.Aircraft;
 public class LandingTimeScheduler {
 
 	/**
+	 * Sets the best landing time (target time) for each aircraft and then,
+	 * schedules the landing sequence with valid lading times starting from the begin of the sequence.
+	 * 
+	 * @param aircraftLandingSequence
+	 */
+	public void scheduleTargetTimesFromBegin(Aircraft[] aircraftLandingSequence) {
+		for (Aircraft aircraft : aircraftLandingSequence) {
+			aircraft.setBestLandingTime();
+		}
+		scheduleFromBegin(aircraftLandingSequence);
+	}
+	
+	/**
+	 * Sets the best landing time (target time) for each aircraft and then,
+	 * schedules the landing sequence with valid lading times starting from the end of the sequence.
+	 * 
+	 * @param aircraftLandingSequence
+	 */
+	public void scheduleTargetTimesFromEnd(Aircraft[] aircraftLandingSequence) {
+		for (Aircraft aircraft : aircraftLandingSequence) {
+			aircraft.setBestLandingTime();
+		}
+		scheduleFromEnd(aircraftLandingSequence);
+	}
+	
+	/**
 	 * Schedules the landing times for a sequence of aircrafts landings,
 	 * starting from the begin of the landing sequence.
 	 * 

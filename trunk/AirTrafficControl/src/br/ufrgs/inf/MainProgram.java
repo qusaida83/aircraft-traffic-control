@@ -26,7 +26,7 @@ public class MainProgram {
 
 			try {
 				AirTrafficControl atc = AtcLoader.createATCInstanceFromFile(fileName);
-				atc.scheduleAircraftsLandings();
+				System.out.println(atc.scheduleAircraftsLandings());
 				
 			} catch (IOException e) {
 				System.out.println("An I/O error occured. The input file may not be in the standard form.");

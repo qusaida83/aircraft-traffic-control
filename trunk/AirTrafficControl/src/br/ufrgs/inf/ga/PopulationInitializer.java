@@ -66,6 +66,10 @@ public class PopulationInitializer {
 		// we ensure many as possible optimal landing times for aircrafts with higher penalty costs.
 		individuals.add(createIndividualSortedByPenaltyCost());
 		
+		individuals.add(createIndividualForLandingSequenceScheduleFromEnd());
+		
+		individuals.add(createIndividualSortedByPenaltyCostScheduleFromEnd());
+		
 		// Generates randomly the rest of the population.
 		for (int i = individuals.size(); i < Population.MAX_INDIVIDUALS; i++) {
 			individuals.add(createRandomIndividual());
@@ -114,7 +118,29 @@ public class PopulationInitializer {
 	 */
 	private Individual createIndividualForLandingSequence(final Aircraft[] aircraftLandingSequence) {		
 		// Schedules the landing times for each aircraft in the landing sequence.
-		scheduler.scheduleRandomTimesFromBegin(aircraftLandingSequence);
+		scheduler.scheduleFromBegin(aircraftLandingSequence);
+		
+		// At this point, the aircreftLandingSequence vector still ordered by the aircrafts landing time parameter. So, no sort is needed here!
+		int fitnessValue = fitnessCalculator.evaluate(aircraftLandingSequence);
+		return new Individual(aircraftLandingSequence, fitnessValue);
+	}
+	
+	private Individual createIndividualSortedByPenaltyCostScheduleFromEnd() {
+		final Aircraft[] aircraftLandingSequence = createLandingSequenceSortedByPenaltyCost();
+		
+		// Schedules the landing times for each aircraft in the landing sequence.
+		scheduler.scheduleFromEnd(aircraftLandingSequence);
+		
+		// At this point, the aircreftLandingSequence vector still ordered by the aircrafts landing time parameter. So, no sort is needed here!
+		int fitnessValue = fitnessCalculator.evaluate(aircraftLandingSequence);
+		return new Individual(aircraftLandingSequence, fitnessValue);
+	}
+	
+	private Individual createIndividualForLandingSequenceScheduleFromEnd() {
+		final Aircraft[] aircraftLandingSequence = createLandingSequenceSortedByTargetTimes();
+		
+		// Schedules the landing times for each aircraft in the landing sequence.
+		scheduler.scheduleFromEnd(aircraftLandingSequence);
 		
 		// At this point, the aircreftLandingSequence vector still ordered by the aircrafts landing time parameter. So, no sort is needed here!
 		int fitnessValue = fitnessCalculator.evaluate(aircraftLandingSequence);

@@ -47,7 +47,7 @@ public class MutationOperator {
 		// Shuffle the landing sequence of the individual.
 		ShuffleHelper.shuffle(individual.getAircraftLandingSequence());
 		
-		scheduler.scheduleFromBegin(individual.getAircraftLandingSequence());
+		scheduler.scheduleRandomTimesFromBegin(individual.getAircraftLandingSequence());
 		int fitnessValue = fitnessEvaluator.evaluate(individual.getAircraftLandingSequence());
 		individual.setFitnessValue(fitnessValue);
 	}

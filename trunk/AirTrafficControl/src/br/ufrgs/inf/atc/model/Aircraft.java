@@ -96,7 +96,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	
 	@Override
 	public String toString() {
-		return " (X" + this.getId() + ": " + this.getLandingTime() + ", T" + this.getId() + ": " + this.getTargetLandingTime() + ", E" + this.getId() + ": " + this.getEarliestLandingTime() + ", L" + this.getId() + ": " + this.getLatestLandingTime() + ") ";
+		return " X" + this.getId() + ": " + this.getLandingTime();// + ", T" + this.getId() + ": " + this.getTargetLandingTime() + ", E" + this.getId() + ": " + this.getEarliestLandingTime() + ", L" + this.getId() + ": " + this.getLatestLandingTime() + ") ";
 	}
 	
 	/**
@@ -190,7 +190,9 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 * Sets a random landing time between this aircraft landing time window values.
 	 */
 	public void setRandomLandingTime() {
-		this.setLandingTime(this.getEarliestLandingTime() + (int) (Math.random() * (this.getLatestLandingTime() - this.getEarliestLandingTime())));
+		int min = this.getTargetLandingTime() - 8;
+		int max = this.getTargetLandingTime() + 8;
+		this.setLandingTime(min + (int) (Math.random() * (max - min)));
 	}
 	
 	public int getLandingTime() {

@@ -19,7 +19,7 @@ public class Population implements Iterable<Individual> {
 	/**
 	 * Max number of individuals in the population.
 	 */
-	public static final int MAX_INDIVIDUALS = 10000;
+	public static final int MAX_INDIVIDUALS = 500;
 	
 	/**
 	 * Reproduction rate for this population.
@@ -29,7 +29,7 @@ public class Population implements Iterable<Individual> {
 	/**
 	 * Mutation rate for this population.
 	 */
-	public static final float MUTATION_RATE = 0.1f;
+	public static final float MUTATION_RATE = 0.5f;
 	
 	/**
 	 * Set of individuals of the population.

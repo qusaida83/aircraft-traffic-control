@@ -7,6 +7,7 @@ import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 import br.ufrgs.inf.ga.model.Individual;
 import br.ufrgs.inf.ga.model.Parents;
 import br.ufrgs.inf.ga.model.Population;
+import br.ufrgs.inf.ga.model.Solution;
 import br.ufrgs.inf.ga.operators.CrossoverOperator;
 import br.ufrgs.inf.ga.operators.MutationOperator;
 import br.ufrgs.inf.ga.operators.SelectionOperator;
@@ -28,7 +29,7 @@ public class GeneticAlgorithm {
 	/**
 	 * Max number of generations that the algorithm will run until a valid solution is find.
 	 */
-	public static final int MAX_GENERATION = 900;
+	public static final int MAX_GENERATION = 1000;
 	
 	/**
 	 * Responsable for initialize the population object.
@@ -77,6 +78,11 @@ public class GeneticAlgorithm {
 	private int generationsWithoutImprovement = 0;
 	
 	/**
+	 * Algorithm solution.
+	 */
+	private Solution solution;
+	
+	/**
 	 * Initializes the dependencies.
 	 * @param aircrafts aircrafts data loaded from an input file used to create the population for the algorithm.
 	 */
@@ -101,7 +107,7 @@ public class GeneticAlgorithm {
 			
 			// The algorithm stop condition
 			while(!solutionFound() && generation < MAX_GENERATION) {
-				System.out.println("### generation " + generation);
+				//System.out.println("### generation " + generation);
 				
 				// swap the global best individual so far for the best individual of the current
 				// generation, if this last one is better!
@@ -115,6 +121,9 @@ public class GeneticAlgorithm {
 				// next generation...
 				generation++;
 			}
+			
+			this.solution = new Solution(population, bestIndividual, MAX_GENERATION, generation, generationsWithoutImprovement);
+
 		} catch (Exception e) {
 			throw new AlgorithmException("An exception has occured when the algorithm was running.", e);
 		}
@@ -126,8 +135,8 @@ public class GeneticAlgorithm {
 	private void findTheBestIndividualInCurrentGeneration() {
 		// The best individual found in this population.
 		Individual generationBestIndividual = population.getMostAdaptedIndividual();
-		System.out.println("#### generation best individual: " + generationBestIndividual);
-		System.out.println("#### global best individual: " + bestIndividual);
+		//System.out.println("#### generation best individual: " + generationBestIndividual);
+		//System.out.println("#### global best individual: " + bestIndividual);
 		
 		// if the best individual in this generation is more adapted than the global best individual so far,
 		// than, the best individual in this generation becomes the global best individual.
@@ -159,8 +168,10 @@ public class GeneticAlgorithm {
 
 	/**
 	 * Execute the reproduction operation.
+	 * 
 	 * This process generates a new individual for each parents reproduction.
-	 * This son can join the population by
+	 * This son can join the population just if he is more adapted than one of his parents.
+	 * If true, the less adapted parent is replaced by his son.
 	 */
 	protected void reproduct() {
 		for (Parents parents : selectedParents) {
@@ -172,6 +183,10 @@ public class GeneticAlgorithm {
 		}
 	}
 	
+	/**
+	 * Mutates a percentage of bad individuals in attempt to generate better solutions.
+	 * This is good for escaping from minimal local solutions.
+	 */
 	protected void mutate() {
 		int n = (int)(Population.MAX_INDIVIDUALS * Population.MUTATION_RATE);
 		int mutationStartIndex = (int)(Population.MAX_INDIVIDUALS * 0.5f);
@@ -202,5 +217,13 @@ public class GeneticAlgorithm {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Returns the solution founded by the algorithm.
+	 * @return the solution.
+	 */
+	public Solution getSolution() {
+		return this.solution;
 	}
 }
