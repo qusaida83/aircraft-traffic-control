@@ -114,7 +114,7 @@ public class PopulationInitializer {
 	 */
 	private Individual createIndividualForLandingSequence(final Aircraft[] aircraftLandingSequence) {		
 		// Schedules the landing times for each aircraft in the landing sequence.
-		scheduler.schedule(aircraftLandingSequence);
+		scheduler.scheduleRandomTimesFromBegin(aircraftLandingSequence);
 		
 		// At this point, the aircreftLandingSequence vector still ordered by the aircrafts landing time parameter. So, no sort is needed here!
 		int fitnessValue = fitnessCalculator.evaluate(aircraftLandingSequence);

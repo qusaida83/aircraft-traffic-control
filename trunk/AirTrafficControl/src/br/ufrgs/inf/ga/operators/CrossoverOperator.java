@@ -50,8 +50,8 @@ public class CrossoverOperator {
 		ShuffleHelper.shuffle(parent2Copy.getAircraftLandingSequence());
 		
 		// Creates the times schedules for each aircraft in a landing sequence.
-		scheduler.schedule(parent1Copy.getAircraftLandingSequence());
-		scheduler.schedule(parent2Copy.getAircraftLandingSequence());
+		scheduler.scheduleFromBegin(parent1Copy.getAircraftLandingSequence());
+		scheduler.scheduleFromBegin(parent2Copy.getAircraftLandingSequence());
 		
 		// updates the fitness values of the parents copies.
 		int parent1CopyFitnessValue = fitnessEvaluator.evaluate(parent1Copy.getAircraftLandingSequence());

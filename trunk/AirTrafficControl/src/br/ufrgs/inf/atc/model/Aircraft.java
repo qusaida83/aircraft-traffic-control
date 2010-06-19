@@ -2,6 +2,8 @@ package br.ufrgs.inf.atc.model;
 
 import java.util.Arrays;
 
+import br.ufrgs.inf.ga.model.Population;
+
 /**
  * Encapsulates all aircraft data necessary for a ATC (air traffic control) schedules all landings.
  * 
@@ -105,7 +107,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 * @param previousAircraft aircraft that landed first this one (xi).
 	 * @return true if this landing time respects the restriction. false otherwise.
 	 */
-	public boolean respectsGapTimeBetween(Aircraft previousAircraft) {
+	public boolean respectsGapTimeBetween(final Aircraft previousAircraft) {
 		return this.getLandingTime() >= previousAircraft.getLandingTime() + this.getGapTimeBetween(previousAircraft);
 	}
 	
@@ -162,7 +164,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 * @param otherAircraftId if of other aircraft.
 	 * @return The gap time between this aircraft and other with id equals to the {@code otherAircraftId}.
 	 */
-	public int getGapTimeBetween(Aircraft otherAircraft) {
+	public int getGapTimeBetween(final Aircraft otherAircraft) {
 		return staticData.getGapTimeBetweenLandings()[otherAircraft.getId()];
 	}
 	
@@ -171,8 +173,24 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 * 
 	 * @param previousAircraft the aircraft that landed before this one.
 	 */
-	public void setMinLandingTimeAfterLandingOf(Aircraft previousAircraft) {
+	public void setMinLandingTimeAfterLandingOf(final Aircraft previousAircraft) {
 		this.setLandingTime(previousAircraft.getLandingTime() + this.getGapTimeBetween(previousAircraft));
+	}
+	
+	/**
+	 * Sets the maximal landing time before the landing of the next aircraft.
+	 * 
+	 * @param nextAircraft the aircraft that will land after this one.
+	 */
+	public void setMaxLandingTimeBeforeLandingOf(final Aircraft nextAircraft) {
+		this.setLandingTime(nextAircraft.getLandingTime() - nextAircraft.getGapTimeBetween(this));
+	}
+	
+	/**
+	 * Sets a random landing time between this aircraft landing time window values.
+	 */
+	public void setRandomLandingTime() {
+		this.setLandingTime(this.getEarliestLandingTime() + (int) (Math.random() * (this.getLatestLandingTime() - this.getEarliestLandingTime())));
 	}
 	
 	public int getLandingTime() {

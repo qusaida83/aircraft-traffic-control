@@ -5,6 +5,7 @@ import java.io.IOException;
 import br.ufrgs.inf.atc.AtcLoader;
 import br.ufrgs.inf.atc.AirTrafficControl;
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
+import br.ufrgs.inf.ga.model.Population;
 
 /**
  * Creates an instance of ATC problem from a input file and execute the ATC
