@@ -58,31 +58,9 @@ public class FitnessEvaluator {
 			
 			// if the landing sequence is a valid one, the fitness value will be, in the end, the cost of the landing sequence.
 			// And we aim on the minimization of this cost!
-			fitnessValue += calculateCost(aircraft);
+			fitnessValue += aircraft.getLandingCost();
 		}
 		
 		return fitnessValue;
-	}
-	
-	/**
-	 * Calculates the cost of an aircraft landing.
-	 * 
-	 * <p>
-	 * This calculus is based on the objective function that we want to minimize.
-	 * Cost of an aircraft landing = gi ∗ αi + hi ∗ βi
-	 * where gi = penalty for landing before the target time
-	 * 		 αi = time units before target time
-	 * 		 hi = penalty for landing after the target time
-	 * 		 βi = time units after target time
-	 * 
-	 * If the aircraft lands exactly at target time, it cost is zero!
-	 * </p>
-	 * 
-	 * @param aircraft that is landing.
-	 * @return the cost of the aircraft landing.
-	 */
-	private float calculateCost(Aircraft aircraft) {
-		return aircraft.getLandingBeforeTargetTimePenaltyCost() * aircraft.getTimeUnitsBeforeTargetTime() +
-			   aircraft.getLandingAfterTargetTimePenaltyCost() * aircraft.getTimeUnitsAfterTargetTime();
 	}
 }

@@ -3,8 +3,6 @@ package br.ufrgs.inf.ga.model;
 import java.util.Arrays;
 
 import br.ufrgs.inf.atc.model.Aircraft;
-import br.ufrgs.inf.ga.operators.CrossoverOperator;
-import br.ufrgs.inf.ga.operators.MutationOperator;
 
 /**
  * Class that encapsulates all information related to an individual of the population.
@@ -62,7 +60,7 @@ public class Individual implements Comparable<Individual> {
 	 * @return true if this individual is more adapted than that one. false otherwise.
 	 */
 	public boolean isMoreAdaptedThan(Individual that) {
-		if (this.compareTo(that) >= 0) {
+		if (this.compareTo(that) == 1) {
 			return false;
 		}
 		

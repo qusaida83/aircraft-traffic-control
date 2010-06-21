@@ -28,8 +28,8 @@ public class LandingTimeScheduler {
 	 * starting from the begin of the landing sequence.
 	 * 
 	 * @param aircraftLandingSequence aircraft landing sequence to be scheduled.
-	 */
-	public void scheduleFromBegin(Aircraft[] aircraftLandingSequence) {
+	 *//*
+	public void scheduleFromBegin2(Aircraft[] aircraftLandingSequence) {
 		for (int i = 1; i < aircraftLandingSequence.length; i++) {
 			// The first aircraft landing time can be it's target time once it don't have to wait for any other aircraft to landing first.
 			// So, for any other aircraft landing after the first one, we need to ensure that the time of landing is, at least,
@@ -41,6 +41,62 @@ public class LandingTimeScheduler {
 				// the previous landing time plus the gap time needed to landing.
 				currentAircraft.setMinLandingTimeAfterLandingOf(previousAircraft);
 			}
+		}
+	}*/
+	
+	/**
+	 * Schedules the landing times for a sequence of aircrafts landings,
+	 * starting from the begin of the landing sequence.
+	 * 
+	 * @param aircraftLandingSequence aircraft landing sequence to be scheduled.
+	 */
+	public void scheduleFromBegin(Aircraft[] aircraftLandingSequence) {
+		for (int i = 1; i < aircraftLandingSequence.length; i++) {
+			// The first aircraft landing time can be it's target time once it don't have to wait for any other aircraft to landing first.
+			// So, for any other aircraft landing after the first one, we need to ensure that the time of landing is, at least,
+			// the time of the previous landing plus the gap time needed to landing.
+			
+			Aircraft secondAircraftToLand = aircraftLandingSequence[i - 1];
+			Aircraft thirdAircraftToLand = aircraftLandingSequence[i];
+			if (i > 1) {
+				Aircraft firstAircraftToLand = aircraftLandingSequence[i - 2];
+				rearrangeLandingTimes(firstAircraftToLand, secondAircraftToLand, thirdAircraftToLand);
+			} else if (!thirdAircraftToLand.respectsGapTimeBetween(secondAircraftToLand)) {
+				// If the current aircraft landing time does not respects the restriction, then, this current landing time will be
+				// the previous landing time plus the gap time needed to landing.
+				thirdAircraftToLand.setMinLandingTimeAfterLandingOf(secondAircraftToLand);
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param first
+	 * @param second
+	 * @param third
+	 */
+	private void rearrangeLandingTimes(Aircraft first, Aircraft second, Aircraft third) {
+		if (!third.respectsGapTimeBetween(second)) {
+			// If the current aircraft landing time does not respects the restriction, then, this current landing time will be
+			// the previous landing time plus the gap time needed to landing.
+			third.setMinLandingTimeAfterLandingOf(second);
+		}
+		float firstCost = first.getLandingCost() + second.getLandingCost() + third.getLandingCost();
+		
+		
+		Aircraft secondCopy = second.clone();
+		Aircraft thirdCopy = third.clone();
+		secondCopy.setRandomLandingTimeLessThenTargetTime();
+		thirdCopy.setRandomLandingTimeLessThenTargetTime();
+		float secondCost = first.getLandingCost() + secondCopy.getLandingCost() + thirdCopy.getLandingCost();
+		
+		if (secondCopy.respectsGapTimeBetween(first) &&
+			thirdCopy.respectsGapTimeBetween(secondCopy) &&
+			secondCost < firstCost) {
+
+			second.setLandingTime(secondCopy.getLandingTime());
+			third.setLandingTime(thirdCopy.getLandingTime());
+			
 		}
 	}
 	

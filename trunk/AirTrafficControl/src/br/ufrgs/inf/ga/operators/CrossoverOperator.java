@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.ufrgs.inf.atc.model.Aircraft;
 import br.ufrgs.inf.ga.FitnessEvaluator;
 import br.ufrgs.inf.ga.LandingTimeScheduler;
 import br.ufrgs.inf.ga.model.Individual;
@@ -21,7 +20,7 @@ public class CrossoverOperator {
 	/**
 	 * Number of random copies produced, to choose one among these copies (the best one), to be a candidate for the spot of generated son.
 	 */
-	private static final int MAX_RANDOM_COPIES = 50;
+	private static final int MAX_RANDOM_COPIES = 100;
 	
 	/**
 	 * Schedules the landing time for each aircraft at a landing sequence.
@@ -69,7 +68,7 @@ public class CrossoverOperator {
 		// list with parents copies for manipulation without mess up with parents data.
 		List<Individual> parentsCopies = new LinkedList<Individual>();
 		
-		for (int i = 0; i < MAX_RANDOM_COPIES ; i++) {
+		for (int i = 0; i < MAX_RANDOM_COPIES/2; i++) {
 			Individual parent1Copy1 = parents.getParent1().clone();
 			Individual parent2Copy1 = parents.getParent2().clone();
 			
@@ -97,18 +96,19 @@ public class CrossoverOperator {
 		// list with parents copies for manipulation without mess up with parents data.
 		List<Individual> parentsCopies = new LinkedList<Individual>();
 		
-		Individual parent1Copy1 = parents.getParent1().clone();
-		Individual parent2Copy1 = parents.getParent2().clone();
-		
-		parentsCopies.add(parent1Copy1);
-		parentsCopies.add(parent2Copy1);
-		
-		scheduler.scheduleTargetTimesFromBegin(parent1Copy1.getAircraftLandingSequence());
-		scheduler.scheduleTargetTimesFromBegin(parent2Copy1.getAircraftLandingSequence());
-		
-		setNewFitnessValueTo(parent1Copy1);
-		setNewFitnessValueTo(parent2Copy1);
-		
+		for (int i = 0; i < MAX_RANDOM_COPIES/2; i++) {
+			Individual parent1Copy1 = parents.getParent1().clone();
+			Individual parent2Copy1 = parents.getParent2().clone();
+			
+			parentsCopies.add(parent1Copy1);
+			parentsCopies.add(parent2Copy1);
+			
+			scheduler.scheduleTargetTimesFromBegin(parent1Copy1.getAircraftLandingSequence());
+			scheduler.scheduleTargetTimesFromBegin(parent2Copy1.getAircraftLandingSequence());
+			
+			setNewFitnessValueTo(parent1Copy1);
+			setNewFitnessValueTo(parent2Copy1);
+		}
 		// put the most adapted copy in front of the list.
 		Collections.sort(parentsCopies);
 

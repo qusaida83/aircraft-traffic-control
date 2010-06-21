@@ -2,8 +2,6 @@ package br.ufrgs.inf.atc.model;
 
 import java.util.Arrays;
 
-import br.ufrgs.inf.ga.model.Population;
-
 /**
  * Encapsulates all aircraft data necessary for a ATC (air traffic control) schedules all landings.
  * 
@@ -253,5 +251,27 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 */
 	public void setBestLandingTime() {
 		this.landingTime = getTargetLandingTime();
+	}
+	
+	/**
+	 * Calculates the cost of an aircraft landing.
+	 * 
+	 * <p>
+	 * This calculus is based on the objective function that we want to minimize.
+	 * Cost of an aircraft landing = gi ∗ αi + hi ∗ βi
+	 * where gi = penalty for landing before the target time
+	 * 		 αi = time units before target time
+	 * 		 hi = penalty for landing after the target time
+	 * 		 βi = time units after target time
+	 * 
+	 * If the aircraft lands exactly at target time, it cost is zero!
+	 * </p>
+	 * 
+	 * @param aircraft that is landing.
+	 * @return the cost of the aircraft landing.
+	 */
+	public float getLandingCost() {
+		return this.getLandingBeforeTargetTimePenaltyCost() * this.getTimeUnitsBeforeTargetTime() +
+		   this.getLandingAfterTargetTimePenaltyCost() * this.getTimeUnitsAfterTargetTime();
 	}
 }

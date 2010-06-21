@@ -31,10 +31,10 @@ public class GeneticAlgorithm {
 	/**
 	 * Max number of generations that the algorithm will run until a valid solution is find.
 	 */
-	public static final int MAX_GENERATION = 500;
+	public static final int MAX_GENERATION = 800;
 	
 	/**
-	 * Responsable for initialize the population object.
+	 * Responsible for initialize the population object.
 	 * This class provide a set of initializers methods.
 	 */
 	private final PopulationInitializer populationInitializer;
@@ -219,7 +219,7 @@ public class GeneticAlgorithm {
 	 * @return true if the stop condition is reached, false otherwise.
 	 */
 	protected boolean solutionFound() {
-		if (generationsWithoutImprovement > GeneticAlgorithm.MAX_GENERATION * 1/3) {
+		if (generationsWithoutImprovement > GeneticAlgorithm.MAX_GENERATION * 2/3) {
 			return true;
 		}
 		
