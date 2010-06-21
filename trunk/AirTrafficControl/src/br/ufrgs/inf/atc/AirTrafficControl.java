@@ -36,7 +36,13 @@ public class AirTrafficControl {
 	 */
 	public Solution scheduleAircraftsLandings() throws AlgorithmException {
 		GeneticAlgorithm ga = new GeneticAlgorithm(aircrafts);
+		
+		long startTime = System.currentTimeMillis();
 		ga.execute();
+		long endTime = System.currentTimeMillis();
+		float executionTime = (endTime - startTime) * 0.001f;
+		
+		System.out.println("Tempo em seg: " + executionTime);
 	
 		return ga.getSolution();
 	}

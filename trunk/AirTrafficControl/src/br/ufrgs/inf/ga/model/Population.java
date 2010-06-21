@@ -19,12 +19,12 @@ public class Population implements Iterable<Individual> {
 	/**
 	 * Max number of individuals in the population.
 	 */
-	public static final int MAX_INDIVIDUALS = 500;
+	public static final int MAX_INDIVIDUALS = 400;
 	
 	/**
 	 * Reproduction rate for this population.
 	 */
-	public static final float REPRODUCTION_RATE = 0.5f;
+	public static final float REPRODUCTION_RATE = 0.4f;
 	
 	/**
 	 * Mutation rate for this population.
@@ -103,6 +103,11 @@ public class Population implements Iterable<Individual> {
 		}
 	}
 	
+	/**
+	 * Gets an individual at a position in a population list.
+	 * @param individualIndex individual position in the population.
+	 * @return an individual at position <code>individualIndex</code>
+	 */
 	public Individual get(int individualIndex) {
 		return individuals.get(individualIndex);
 	}

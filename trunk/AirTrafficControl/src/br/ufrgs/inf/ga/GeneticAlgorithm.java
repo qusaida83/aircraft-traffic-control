@@ -3,8 +3,10 @@ package br.ufrgs.inf.ga;
 import java.util.List;
 
 import br.ufrgs.inf.atc.model.AircraftStaticData;
+import br.ufrgs.inf.atc.model.LandingSequenceCreator;
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
 import br.ufrgs.inf.ga.model.Individual;
+import br.ufrgs.inf.ga.model.IndividualCreator;
 import br.ufrgs.inf.ga.model.Parents;
 import br.ufrgs.inf.ga.model.Population;
 import br.ufrgs.inf.ga.model.Solution;
@@ -29,18 +31,13 @@ public class GeneticAlgorithm {
 	/**
 	 * Max number of generations that the algorithm will run until a valid solution is find.
 	 */
-	public static final int MAX_GENERATION = 1000;
+	public static final int MAX_GENERATION = 500;
 	
 	/**
 	 * Responsable for initialize the population object.
 	 * This class provide a set of initializers methods.
 	 */
 	private final PopulationInitializer populationInitializer;
-	
-	/**this.selectionOperator = new SelectionOperator();
-	 * Calculator for the fitness value of an individual in the population.
-	 */
-	private final FitnessEvaluator fitnessEvaluator;
 	
 	/**
 	 * Operator used to select parents to a reproduction process.
@@ -87,9 +84,19 @@ public class GeneticAlgorithm {
 	 * @param aircrafts aircrafts data loaded from an input file used to create the population for the algorithm.
 	 */
 	public GeneticAlgorithm(AircraftStaticData[] aircrafts) {
+		// Schedules aircraft landing times for a specific landing sequence.
 		LandingTimeScheduler scheduler = new LandingTimeScheduler();
-		this.fitnessEvaluator = new FitnessEvaluator();
-		this.populationInitializer = new PopulationInitializer(aircrafts, fitnessEvaluator, scheduler);
+		
+		// Provides methods to create landing sequences with different characteristics.
+		LandingSequenceCreator landingSequenceCreator = new LandingSequenceCreator(aircrafts);
+		
+		// Calculator for the fitness value of an individual in the population.
+		FitnessEvaluator fitnessEvaluator = new FitnessEvaluator();
+		
+		// 
+		IndividualCreator individualCreator = new IndividualCreator(landingSequenceCreator, fitnessEvaluator, scheduler);
+
+		this.populationInitializer = new PopulationInitializer(individualCreator);
 		this.crossoverOperator = new CrossoverOperator(scheduler, fitnessEvaluator);
 		this.mutationOperator = new MutationOperator(scheduler, fitnessEvaluator);
 	}
@@ -212,7 +219,7 @@ public class GeneticAlgorithm {
 	 * @return true if the stop condition is reached, false otherwise.
 	 */
 	protected boolean solutionFound() {
-		if (generationsWithoutImprovement > GeneticAlgorithm.MAX_GENERATION * 2/3) {
+		if (generationsWithoutImprovement > GeneticAlgorithm.MAX_GENERATION * 1/3) {
 			return true;
 		}
 		

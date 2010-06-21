@@ -96,7 +96,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	
 	@Override
 	public String toString() {
-		return " X" + this.getId() + ": " + this.getLandingTime();// + ", T" + this.getId() + ": " + this.getTargetLandingTime() + ", E" + this.getId() + ": " + this.getEarliestLandingTime() + ", L" + this.getId() + ": " + this.getLatestLandingTime() + ") ";
+		return "x" + this.getId() + ": " + this.getLandingTime();// + ", T" + this.getId() + ": " + this.getTargetLandingTime() + ", E" + this.getId() + ": " + this.getEarliestLandingTime() + ", L" + this.getId() + ": " + this.getLatestLandingTime() + ") ";
 	}
 	
 	/**
@@ -108,7 +108,7 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 	 * @return true if this landing time respects the restriction. false otherwise.
 	 */
 	public boolean respectsGapTimeBetween(final Aircraft previousAircraft) {
-		return this.getLandingTime() >= previousAircraft.getLandingTime() + this.getGapTimeBetween(previousAircraft);
+		return this.getLandingTime() >= (previousAircraft.getLandingTime() + this.getGapTimeBetween(previousAircraft));
 	}
 	
 	/**
@@ -193,6 +193,19 @@ public class Aircraft implements Cloneable, Comparable<Aircraft> {
 		int min = this.getTargetLandingTime() - 8;
 		int max = this.getTargetLandingTime() + 8;
 		this.setLandingTime(min + (int) (Math.random() * (max - min)));
+	}
+	
+	public void setRandomLandingTimeLessThenTargetTime() {
+		int min = this.getEarliestLandingTime();
+		int max = this.getTargetLandingTime();
+		this.setLandingTime(min + (int) (Math.random() * (max - min)));
+	}
+	
+	/**
+	 * Sets this aircraft landing time as the latest landing time of this aircraft.
+	 */
+	public void setLatestLandingTime() {
+		this.setLandingTime(this.getLatestLandingTime());
 	}
 	
 	public int getLandingTime() {

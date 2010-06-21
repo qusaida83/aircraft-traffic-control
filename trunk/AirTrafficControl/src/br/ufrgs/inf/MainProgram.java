@@ -18,9 +18,7 @@ public class MainProgram {
 
 	public static void main(String[] args) throws AlgorithmException {
 		if (args == null || args.length == 0) {
-			System.out.println("Error!");
-			System.out.println("[Usage] java "+ AirTrafficControl.class.getName() + " <fileName>");
-			System.out.println("\t1) <fileName> is the name of the file with the ATC instance parameters;");
+			System.out.println("Usage: java "+ MainProgram.class.getName() + " <fileName.txt>");
 		} else {
 			String fileName = args[0];
 

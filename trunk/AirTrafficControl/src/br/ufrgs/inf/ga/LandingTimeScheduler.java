@@ -24,19 +24,6 @@ public class LandingTimeScheduler {
 	}
 	
 	/**
-	 * Sets the best landing time (target time) for each aircraft and then,
-	 * schedules the landing sequence with valid lading times starting from the end of the sequence.
-	 * 
-	 * @param aircraftLandingSequence
-	 */
-	public void scheduleTargetTimesFromEnd(Aircraft[] aircraftLandingSequence) {
-		for (Aircraft aircraft : aircraftLandingSequence) {
-			aircraft.setBestLandingTime();
-		}
-		scheduleFromEnd(aircraftLandingSequence);
-	}
-	
-	/**
 	 * Schedules the landing times for a sequence of aircrafts landings,
 	 * starting from the begin of the landing sequence.
 	 * 
@@ -58,25 +45,6 @@ public class LandingTimeScheduler {
 	}
 	
 	/**
-	 * Schedules the landing times for a sequence of aircrafts landings,
-	 * starting from the end of the landing sequence.
-	 * 
-	 * @param aircraftLandingSequence aircraft landing sequence to be scheduled.
-	 */
-	public void scheduleFromEnd(Aircraft[] aircraftLandingSequence) {
-		for (int i = aircraftLandingSequence.length - 2; i >= 0; i--) {
-			Aircraft nextAircraft = aircraftLandingSequence[i + 1];
-			Aircraft currentAircraft = aircraftLandingSequence[i];
-
-			if (!nextAircraft.respectsGapTimeBetween(currentAircraft)) {
-				// If the gap between the next aircraft to land and the current one is not respected,
-				// then, is set the max valid landing time value for the current aircraft.
-				currentAircraft.setMaxLandingTimeBeforeLandingOf(nextAircraft);
-			}
-		}
-	}
-	
-	/**
 	 * This schedule generates for each aircraft random times between aircraft landing time window values, and then
 	 * schedule these times starting from the begin of the landing sequence.
 	 * 
@@ -90,17 +58,4 @@ public class LandingTimeScheduler {
 		scheduleFromBegin(aircraftLandingSequence);
 	}
 	
-	/**
-	 * This schedule generates for each aircraft random times between aircraft landing time window values, and then
-	 * schedule these times starting from the end of the landing sequence.
-	 * 
-	 * @param aircraftLandingSequence
-	 */
-	public void scheduleRandomTimesFromEnd(Aircraft[] aircraftLandingSequence) {
-		for(Aircraft aircraft : aircraftLandingSequence) {
-			aircraft.setRandomLandingTime();
-		}
-		
-		scheduleFromEnd(aircraftLandingSequence);
-	}
 }
