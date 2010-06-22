@@ -47,17 +47,17 @@ public class PopulationInitializer {
 	public Population createPopulation() {
 		List<Individual> individuals = new LinkedList<Individual>();
 			
-		individuals.add(individualCreator.createIndividualSortedByTargetTimes());
-		
-		// Add an individual where it's landing sequence was sorted by the aircrafts penalty cost for landing after target time.
-		// This way, we try to assign a optimal landing time for those aircrafts with the higher penalty costs... doing this,
-		// we ensure many as possible optimal landing times for aircrafts with higher penalty costs.
-		individuals.add(individualCreator.createIndividualSortedByPenaltyCost());
-		
-		individuals.add(individualCreator.createIndividualSortedByLatestTimes());
-		
 		// Generates randomly the rest of the population.
-		for (int i = individuals.size(); i < config.getMaxIndividuals(); i+=3) {
+		for (int i = individuals.size(); i < config.getMaxIndividuals(); i+=6) {
+
+			individuals.add(individualCreator.createIndividualSortedByTargetTimes());
+			
+			// Add an individual where it's landing sequence was sorted by the aircrafts penalty cost for landing after target time.
+			// This way, we try to assign a optimal landing time for those aircrafts with the higher penalty costs... doing this,
+			// we ensure many as possible optimal landing times for aircrafts with higher penalty costs.
+			individuals.add(individualCreator.createIndividualSortedByPenaltyCost());
+			
+			individuals.add(individualCreator.createIndividualSortedByLatestTimes());
 			
 			// Creates individual with a random landing sequence and times scheduled as close as possible to the target time.
 			individuals.add(individualCreator.createRandomIndividual());
