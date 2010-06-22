@@ -15,21 +15,11 @@ import java.util.List;
  * @author diego
  */
 public class Population implements Iterable<Individual> {
-
-	/**
-	 * Max number of individuals in the population.
-	 */
-	public static final int MAX_INDIVIDUALS = 500;
 	
 	/**
-	 * Reproduction rate for this population.
+	 * Population configuration parameters.
 	 */
-	public static final float REPRODUCTION_RATE = 0.3f;
-	
-	/**
-	 * Mutation rate for this population.
-	 */
-	public static final float MUTATION_RATE = 0.2f;
+	private PopulationConfig config;
 	
 	/**
 	 * Set of individuals of the population.
@@ -45,9 +35,11 @@ public class Population implements Iterable<Individual> {
 	/**
 	 * Resolves the class dependencies.
 	 * 
+	 * @param config population configuration parameters.
 	 * @param individuals Set of individuals in the population.
 	 */
-	public Population(List<Individual> individuals) {
+	public Population(PopulationConfig config, List<Individual> individuals) {
+		this.config = config;
 		this.individuals = individuals;
 	}
 	
@@ -56,7 +48,7 @@ public class Population implements Iterable<Individual> {
 	 * @param individual to be added.
 	 */
 	public void add(Individual individual) {
-		this.individuals.add(individual);
+		this.individuals.add(0, individual);
 		this.sorted = false;
 	}
 	
@@ -100,6 +92,7 @@ public class Population implements Iterable<Individual> {
 	public void sortByFitness() {
 		if (!this.sorted) {
 			Collections.sort(this.individuals);
+			this.sorted = true;
 		}
 	}
 	
@@ -136,5 +129,25 @@ public class Population implements Iterable<Individual> {
 	public void replace(Individual newIndividual, Individual individualToBeRemoved) {
 		this.remove(individualToBeRemoved);
 		this.add(newIndividual);
+	}
+	
+	public void setSorted(boolean sorted) {
+		this.sorted = sorted;
+	}
+	
+	public int getSize() {
+		return this.individuals.size();
+	}
+	
+	public int getMaxIndividuals() {
+		return config.getMaxIndividuals();
+	}
+
+	public float getReproductionRate() {
+		return config.getReproductionRate();
+	}
+
+	public float getMutationRate() {
+		return config.getMutationRate();
 	}
 }

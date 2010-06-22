@@ -6,6 +6,7 @@ import java.util.List;
 import br.ufrgs.inf.ga.model.Individual;
 import br.ufrgs.inf.ga.model.IndividualCreator;
 import br.ufrgs.inf.ga.model.Population;
+import br.ufrgs.inf.ga.model.PopulationConfig;
 
 /**
  * Provides a set of {@link Population} initializers.
@@ -25,13 +26,18 @@ public class PopulationInitializer {
 	private final IndividualCreator individualCreator;
 	
 	/**
+	 * Population configuration parameters.
+	 */
+	private final PopulationConfig config;
+	
+	/**
 	 * Resolve the class dependencies.
 	 * 
-	 * @param landingSequenceCreator Provides a set of landing sequence creator methods. 
-	 * @param aircraftsStaticData The aircrafts static data for a specific ATC problem instance loaded from the file.
-	 * @param fitnessEvaluator used to evaluate the adaptedness of an individual
+	 * @param individualCreator provides a set of methods for create individuals instances.
+	 * @param config Population configuration parameters.
 	 */
-	public PopulationInitializer(final IndividualCreator individualCreator) {
+	public PopulationInitializer(final IndividualCreator individualCreator, final PopulationConfig config) {
+		this.config = config;
 		this.individualCreator = individualCreator;
 	}
 	
@@ -40,10 +46,7 @@ public class PopulationInitializer {
 	 */
 	public Population createPopulation() {
 		List<Individual> individuals = new LinkedList<Individual>();
-		
-		// Add an individual where it's landing sequence is sorted by the aircrafts target time.
-		// If every aircraft lands at it's target time, it would be the best case, where the cost is zero.
-		// So, this sequence is a good one to add in the population always!
+			
 		individuals.add(individualCreator.createIndividualSortedByTargetTimes());
 		
 		// Add an individual where it's landing sequence was sorted by the aircrafts penalty cost for landing after target time.
@@ -51,19 +54,22 @@ public class PopulationInitializer {
 		// we ensure many as possible optimal landing times for aircrafts with higher penalty costs.
 		individuals.add(individualCreator.createIndividualSortedByPenaltyCost());
 		
+		individuals.add(individualCreator.createIndividualSortedByLatestTimes());
+		
 		// Generates randomly the rest of the population.
-		for (int i = individuals.size(); i < Population.MAX_INDIVIDUALS; i+=4) {
+		for (int i = individuals.size(); i < config.getMaxIndividuals(); i+=3) {
+			
 			// Creates individual with a random landing sequence and times scheduled as close as possible to the target time.
 			individuals.add(individualCreator.createRandomIndividual());
-			// Creates individual where its landing sequence is sorted by its landing time that was randomly generated. 
-			individuals.add(individualCreator.createIndividualSortedByRandomLandingSequence());
+			
 			// Creates individual with the characteristic that its landing sequence aircrafts have landing times equals to the earliest landing time.
 			individuals.add(individualCreator.createIndividualSortedByEarliestTimes());
-			// Creates individual with the characteristic that its landing sequence aircrafts have landing times equals to the latest landing time.
-			individuals.add(individualCreator.createIndividualSortedByLatestTimes());
+			
+			// Creates individual where its landing sequence is sorted by its landing time that was randomly generated. 
+			individuals.add(individualCreator.createIndividualSortedByRandomLandingSequence());
 		}
-		
-		return new Population(individuals);
+			
+		return new Population(config, individuals);
 	}
 
 	

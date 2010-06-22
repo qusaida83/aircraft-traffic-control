@@ -3,6 +3,7 @@ package br.ufrgs.inf.atc;
 import br.ufrgs.inf.atc.model.AircraftStaticData;
 import br.ufrgs.inf.ga.GeneticAlgorithm;
 import br.ufrgs.inf.ga.exceptions.AlgorithmException;
+import br.ufrgs.inf.ga.model.PopulationConfig;
 import br.ufrgs.inf.ga.model.Solution;
 
 
@@ -13,20 +14,19 @@ import br.ufrgs.inf.ga.model.Solution;
  * 
  */
 public class AirTrafficControl {
-
+	
 	/**
-	 * Vector that holds all aircrafts in the radar visible area.
+	 * 
 	 */
-	private AircraftStaticData[] aircrafts;
+	private GeneticAlgorithm geneticAlgorithm;
 
 	/**
 	 * Constructs the Air traffic control core.
 	 * 
-	 * @param aircrafts vector with all aircraft on the radar area.
-	 * @param gapTimeBetweenAnotherAircraftLanding matrix with all landing time gap between the aircrafts.
+	 * @param geneticAlgorithm
 	 */
-	public AirTrafficControl(AircraftStaticData[] aircrafts) {
-		this.aircrafts = aircrafts;
+	public AirTrafficControl(GeneticAlgorithm geneticAlgorithm) {
+		this.geneticAlgorithm = geneticAlgorithm;
 	}
 
 	/**
@@ -35,15 +35,15 @@ public class AirTrafficControl {
 	 * @throws AlgorithmException 
 	 */
 	public Solution scheduleAircraftsLandings() throws AlgorithmException {
-		GeneticAlgorithm ga = new GeneticAlgorithm(aircrafts);
+		
 		
 		long startTime = System.currentTimeMillis();
-		ga.execute();
+		geneticAlgorithm.execute();
 		long endTime = System.currentTimeMillis();
 		float executionTime = (endTime - startTime) * 0.001f;
 		
 		System.out.println("Tempo em seg: " + executionTime);
 	
-		return ga.getSolution();
+		return geneticAlgorithm.getSolution();
 	}
 }

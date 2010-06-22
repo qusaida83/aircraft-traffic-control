@@ -41,9 +41,7 @@ public class MutationOperator {
 	 * @return the generated individual.
 	 */
 	public void execute(final Individual individual) {
-		// put all landing times as the target time of each aircraft to reschedule the times.
-		individual.setBestLandingTimeForEachAircraft();
-		
+	
 		// Shuffle the landing sequence of the individual.
 		ShuffleHelper.shuffle(individual.getAircraftLandingSequence());
 		

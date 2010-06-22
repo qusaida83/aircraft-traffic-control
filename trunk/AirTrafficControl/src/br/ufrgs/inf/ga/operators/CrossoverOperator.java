@@ -20,7 +20,7 @@ public class CrossoverOperator {
 	/**
 	 * Number of random copies produced, to choose one among these copies (the best one), to be a candidate for the spot of generated son.
 	 */
-	private static final int MAX_RANDOM_COPIES = 100;
+	private static final int MAX_RANDOM_COPIES = 50;
 	
 	/**
 	 * Schedules the landing time for each aircraft at a landing sequence.
@@ -68,7 +68,7 @@ public class CrossoverOperator {
 		// list with parents copies for manipulation without mess up with parents data.
 		List<Individual> parentsCopies = new LinkedList<Individual>();
 		
-		for (int i = 0; i < MAX_RANDOM_COPIES/2; i++) {
+		for (int i = 0; i < MAX_RANDOM_COPIES; i++) {
 			Individual parent1Copy1 = parents.getParent1().clone();
 			Individual parent2Copy1 = parents.getParent2().clone();
 			
@@ -96,7 +96,7 @@ public class CrossoverOperator {
 		// list with parents copies for manipulation without mess up with parents data.
 		List<Individual> parentsCopies = new LinkedList<Individual>();
 		
-		for (int i = 0; i < MAX_RANDOM_COPIES/2; i++) {
+		for (int i = 0; i < 5; i++) {
 			Individual parent1Copy1 = parents.getParent1().clone();
 			Individual parent2Copy1 = parents.getParent2().clone();
 			

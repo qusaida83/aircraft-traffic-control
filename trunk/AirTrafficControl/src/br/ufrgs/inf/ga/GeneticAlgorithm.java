@@ -9,6 +9,7 @@ import br.ufrgs.inf.ga.model.Individual;
 import br.ufrgs.inf.ga.model.IndividualCreator;
 import br.ufrgs.inf.ga.model.Parents;
 import br.ufrgs.inf.ga.model.Population;
+import br.ufrgs.inf.ga.model.PopulationConfig;
 import br.ufrgs.inf.ga.model.Solution;
 import br.ufrgs.inf.ga.operators.CrossoverOperator;
 import br.ufrgs.inf.ga.operators.MutationOperator;
@@ -31,7 +32,7 @@ public class GeneticAlgorithm {
 	/**
 	 * Max number of generations that the algorithm will run until a valid solution is find.
 	 */
-	public static final int MAX_GENERATION = 800;
+	public final int maxGenerations;
 	
 	/**
 	 * Responsible for initialize the population object.
@@ -81,9 +82,14 @@ public class GeneticAlgorithm {
 	
 	/**
 	 * Initializes the dependencies.
-	 * @param aircrafts aircrafts data loaded from an input file used to create the population for the algorithm.
+	 * 
+	 * @param populationConfig population configuration parameters.
+	 * @param maxGenerations max number of generations.
+	 * @param aircrafts aircrafts data loaded from an input file.
 	 */
-	public GeneticAlgorithm(AircraftStaticData[] aircrafts) {
+	public GeneticAlgorithm(PopulationConfig populationConfig, int maxGenerations, AircraftStaticData[] aircrafts) {
+		this.maxGenerations = maxGenerations;
+		
 		// Schedules aircraft landing times for a specific landing sequence.
 		LandingTimeScheduler scheduler = new LandingTimeScheduler();
 		
@@ -96,7 +102,7 @@ public class GeneticAlgorithm {
 		// 
 		IndividualCreator individualCreator = new IndividualCreator(landingSequenceCreator, fitnessEvaluator, scheduler);
 
-		this.populationInitializer = new PopulationInitializer(individualCreator);
+		this.populationInitializer = new PopulationInitializer(individualCreator, populationConfig);
 		this.crossoverOperator = new CrossoverOperator(scheduler, fitnessEvaluator);
 		this.mutationOperator = new MutationOperator(scheduler, fitnessEvaluator);
 	}
@@ -113,7 +119,7 @@ public class GeneticAlgorithm {
 			int generation = 1;
 			
 			// The algorithm stop condition
-			while(!solutionFound() && generation < MAX_GENERATION) {
+			while(!solutionFound() && generation < maxGenerations) {
 				//System.out.println("### generation " + generation);
 				
 				// swap the global best individual so far for the best individual of the current
@@ -129,7 +135,7 @@ public class GeneticAlgorithm {
 				generation++;
 			}
 			
-			this.solution = new Solution(population, bestIndividual, MAX_GENERATION, generation, generationsWithoutImprovement);
+			this.solution = new Solution(population, bestIndividual, maxGenerations, generation, generationsWithoutImprovement);
 
 		} catch (Exception e) {
 			throw new AlgorithmException("An exception has occured when the algorithm was running.", e);
@@ -181,6 +187,7 @@ public class GeneticAlgorithm {
 	 * If true, the less adapted parent is replaced by his son.
 	 */
 	protected void reproduct() {
+
 		for (Parents parents : selectedParents) {
 			Individual son = crossoverOperator.execute(parents);
 			Individual lessAdaptedParent = parents.getLessAdaptedParent();
@@ -195,18 +202,18 @@ public class GeneticAlgorithm {
 	 * This is good for escaping from minimal local solutions.
 	 */
 	protected void mutate() {
-		int n = (int)(Population.MAX_INDIVIDUALS * Population.MUTATION_RATE);
-		int mutationStartIndex = (int)(Population.MAX_INDIVIDUALS * 0.5f);
-		population.sortByFitness();
+		int n = (int)(population.getSize() * population.getMutationRate());
+		int mutationStartIndex = (int)(population.getSize() * 0.5f);
 		
 		// Executes n randomly mutations in individuals starting from the middle of the sorted population to the end.
 		for (int i = 0; i < n; i++) {
 			// generates a random index between mutationStartIndex and the size of the population.
-			// TODO verify the correctness of this calculus
-			int individualToBeMutatedIndex = mutationStartIndex + (int) (Math.random() * (Population.MAX_INDIVIDUALS - mutationStartIndex));
+			int individualToBeMutatedIndex = mutationStartIndex + (int) (Math.random() * (population.getSize() - mutationStartIndex));
 			Individual individualToBeMutated = population.get(individualToBeMutatedIndex);
 			mutationOperator.execute(individualToBeMutated);
 		}
+		population.setSorted(false);
+		population.sortByFitness();
 	}
 	
 	/**
@@ -219,7 +226,7 @@ public class GeneticAlgorithm {
 	 * @return true if the stop condition is reached, false otherwise.
 	 */
 	protected boolean solutionFound() {
-		if (generationsWithoutImprovement > GeneticAlgorithm.MAX_GENERATION * 2/3) {
+		if (generationsWithoutImprovement > this.maxGenerations * 2/3) {
 			return true;
 		}
 		

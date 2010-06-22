@@ -28,10 +28,7 @@ public class SelectionOperator {
 	public List<Parents> selectParents(Population population) {
 		List<Parents> selectedParents = new LinkedList<Parents>();
 		
-		int selectedIndividualsCount = (int)(Population.MAX_INDIVIDUALS * Population.REPRODUCTION_RATE);
-
-		// sorts the population (asc by fitness value) and select just the most adapted ones.
-		population.sortByFitness();
+		int selectedIndividualsCount = (int)(population.getMaxIndividuals() * population.getReproductionRate());
 		
 		// selects the individuals and create the parents
 		for(int i = 0; i < selectedIndividualsCount; i++) {

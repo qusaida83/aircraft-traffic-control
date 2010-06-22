@@ -25,7 +25,7 @@ public class AtcLoader {
 	 * @throws IOException
 	 *             thrown if any I/O operation goes wrong.
 	 */
-	public static AirTrafficControl createATCInstanceFromFile(String fileName) throws IOException {
+	public static AircraftStaticData[] createATCInstanceFromFile(String fileName) throws IOException {
 		// String with all parameters for the problem instance. each parameter
 		// is separated from others by a space character.
 		String textFromFile = getTextFromFile(fileName);
@@ -45,7 +45,7 @@ public class AtcLoader {
 			aircrafts[i] = createAircraftStaticData(i, atcInstanceParameters, aircraftCount);
 		}
 
-		return new AirTrafficControl(aircrafts);
+		return aircrafts;
 	}
 
 	/**

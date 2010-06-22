@@ -70,7 +70,7 @@ public class LandingTimeScheduler {
 	}
 
 	/**
-	 * 
+	 * Finds the best time scheduling for a sequence of 3 aircraft landings.
 	 * @param first
 	 * @param second
 	 * @param third
