@@ -1,0 +1,26 @@
+execuções para a instancia airland1.txt
+#1
+Tempo em seg: 5.0140004
+
+Solution cost: 700
+Landing sequence: [x2: 98, x3: 106, x4: 118, x5: 126, x6: 134, x7: 142, x8: 150, x0: 165, x9: 180, x1: 258]
+#2
+Tempo em seg: 5.734
+
+Solution cost: 700
+Landing sequence: [x2: 98, x3: 106, x4: 118, x5: 126, x6: 134, x7: 142, x8: 150, x0: 165, x9: 180, x1: 258]
+#3
+Tempo em seg: 5.9540005
+
+Solution cost: 700
+Landing sequence: [x2: 98, x3: 106, x4: 118, x5: 126, x6: 134, x7: 142, x8: 150, x0: 165, x9: 180, x1: 258]
+#4
+Tempo em seg: 6.6910005
+
+Solution cost: 700
+Landing sequence: [x2: 98, x3: 106, x4: 118, x5: 126, x6: 134, x7: 142, x8: 150, x0: 165, x9: 180, x1: 258]
+#5
+Tempo em seg: 4.4290004
+
+Solution cost: 700
+Landing sequence: [x2: 98, x3: 106, x4: 118, x5: 126, x6: 134, x7: 142, x8: 150, x0: 165, x9: 180, x1: 258]
