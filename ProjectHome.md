@@ -1,0 +1,1 @@
+This project implements a genetic algorithm for scheduling aircraft landings on an aircraft traffic control system. The base idea is improve the fitness evaluation function of the algorithm to provide a solution as close to the optimal
